@@ -1,0 +1,64 @@
+{{_header.html}}
+
+<script type="application/javascript" defer="defer">
+			function send_command() {
+				var lockMap = document.getElementById("lockMap");
+				window.location.href = '../handler?csrf={csrf}&command=conf lockMap ' + lockMap.value;
+			}
+			function submitenter(e) {
+				var keycode;
+				if (window.event) keycode = window.event.keyCode;
+
+				if (keycode == 13) {
+					send_command();
+				}
+			}
+</script>
+
+        <div class="span9">
+          <div class="row-fluid">
+            <div class="span9">
+			<div class="tabbable">
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#config" data-toggle="tab">config</a></li>
+					<li><a href="#macros" data-toggle="tab">macros</a></li>
+					<li><a href="#timeouts" data-toggle="tab">timeouts</a></li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active" id="config">
+					
+						<div class="span8 well">
+						<div class="pull-right"><span class="label label-important">Change your config!</span></div>
+							<br />
+							<a class="btn" href="http://127.0.0.1:6903/arrowcraft" target="_blank">Upload arrowcraft.txt</a><br />
+							<a class="btn" href="http://127.0.0.1:6903/avoid" target="_blank">Upload avoid.txt</a><br />
+							<a class="btn" href="http://127.0.0.1:6903/chat_resp" target="_blank">Upload chat_resp.txt</a><br />
+							<a class="btn" href="http://127.0.0.1:6903/config" target="_blank">Upload config.txt</a><br />
+							<a class="btn" href="http://127.0.0.1:6903/items_control" target="_blank">Upload items_control.txt</a><br />
+							<a class="btn" href="http://127.0.0.1:6903/mon_control" target="_blank">Upload mon_control.txt</a><br />
+							<a class="btn" href="http://127.0.0.1:6903/pickupitems" target="_blank">Upload pickupitems.txt</a><br />
+							<a class="btn" href="http://127.0.0.1:6903/priority" target="_blank">Upload priority.txt</a><br />
+							<a class="btn" href="http://127.0.0.1:6903/responses" target="_blank">Upload responses.txt</a><br />
+							<a class="btn" href="http://127.0.0.1:6903/routeweights" target="_blank">Upload routeweights.txt</a><br />
+							<a class="btn" href="http://127.0.0.1:6903/shop" target="_blank">Upload shop.txt</a><br />
+							<a class="btn" href="http://127.0.0.1:6903/timeouts" target="_blank">Upload timeouts.txt</a><br />
+						</div>
+					
+						<div class="span4 well">
+
+				
+						</div>
+						
+					</div>
+					
+				
+					
+	
+				</div>
+			</div>
+            </div>
+          </div>
+		  
+        </div>
+
+{{_footer.html}}

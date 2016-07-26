@@ -54,7 +54,7 @@
 						</tbody>
 					</table>
 					</div>
-					<div class="tab-pane" id="itens">
+					<div class="tab-pane" id="items">
 						<table class="table table-hover">
 						<tbody>
 						<tr><!-- {startLoop} -->

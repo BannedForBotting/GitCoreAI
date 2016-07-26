@@ -20,15 +20,13 @@
             <div class="span9">
 			<div class="tabbable">
 				<ul class="nav nav-tabs">
-					<li class="active"><a href="#config" data-toggle="tab">config</a></li>
-					<li><a href="#macros" data-toggle="tab">macros</a></li>
-					<li><a href="#timeouts" data-toggle="tab">timeouts</a></li>
+					<li class="active"><a href="#config" data-toggle="tab">control</a></li>
 				</ul>
 				<div class="tab-content">
 					<div class="tab-pane active" id="config">
 					
 						<div class="span8 well">
-						<div class="pull-right"><span class="label label-important">Change your config!</span></div>
+						<div class="pull-right"><span class="label label-important">Change your control script</span></div>
 							<br />
 							<a class="btn" href="http://127.0.0.1:6903/arrowcraft" target="_blank">Upload arrowcraft.txt</a><br />
 							<a class="btn" href="http://127.0.0.1:6903/avoid" target="_blank">Upload avoid.txt</a><br />

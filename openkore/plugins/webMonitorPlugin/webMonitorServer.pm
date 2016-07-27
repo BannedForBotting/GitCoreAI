@@ -840,6 +840,7 @@ sub request {
 			'storageLog' => loadTextToHTML($Settings::storage_log_file),
 			'shopLog' => loadTextToHTML($Settings::shop_log_file),
 		
+			'brand' => 'RO',
 			'version' => $Settings::NAME . ' ' . $Settings::VERSION . ' ' . $Settings::CVS, # Never used
 		);
 	}

@@ -13,7 +13,8 @@ RUN yum -y update && \
 		perl-Compress-Zlib.x86_64 \
 		perl-Archive-Tar.x86_64 \
 		perl-CPAN.x86_64 \
-		perl-Digest-SHA 
+		perl-Digest-SHA \
+		readline.x86_64
 		
 RUN yum clean all
 
@@ -23,7 +24,7 @@ RUN yum clean all
 RUN curl -L cpanmin.us | perl - Mojolicious@5.51
 #RUN cpan Mojolicious
 
-#ENV XIP 43.254.132.28
+#ENV XIP 8.8.8.8
 ENV XLISTEN_PORT 6901
 ENV WLISTEN_PORT 6902
 ENV ULISTEN_PORT 6903
@@ -37,6 +38,5 @@ RUN chmod +x openkore.pl & chmod +x start.sh & chmod -R 777 ./control
 EXPOSE ${XLISTEN_PORT} ${WLISTEN_PORT} ${ULISTEN_PORT} ${WSLISTEN_PORT} 
 
 WORKDIR /root/openkore
-#CMD ["perl","openkore.pl"]
 CMD ["sh","start.sh"]
 

@@ -663,65 +663,14 @@ equipAuto {
 	inInventory
 	manualAI 0
 }
-useSelf_item Green Herb {
+
+useSelf_item {
 	hp
 	sp
 	homunculus_hp
 	homunculus_sp
 	homunculus_dead
 	onAction
-	whenStatusActive Poisoned
-	whenStatusInactive
-	whenFollowing
-	spirit
-	amuletType
-	aggressives
-	monsters
-	notMonsters
-	monstersCount
-	stopWhenHit 0
-	inLockOnly 1
-	notWhileSitting 1
-	notInTown 0
-	timeout 0
-	disabled 0
-	inInventory
-	manualAI 0
-}
-
-useSelf_item Blue Herb, Grape {
-	hp
-	sp < 50%
-	homunculus_hp
-	homunculus_sp
-	homunculus_dead
-	onAction
-	whenStatusActive
-	whenStatusInactive
-	whenFollowing
-	spirit
-	amuletType
-	aggressives
-	monsters
-	notMonsters
-	monstersCount
-	stopWhenHit 0
-	inLockOnly 1
-	notWhileSitting 1
-	notInTown 0
-	timeout 0
-	disabled 0
-	inInventory
-	manualAI 0
-}
-
-useSelf_item Novice Potion {
-	hp < 40%
-	sp
-	homunculus_hp
-	homunculus_sp
-	homunculus_dead
-	onAction
 	whenStatusActive
 	whenStatusInactive
 	whenFollowing
@@ -733,203 +682,34 @@ useSelf_item Novice Potion {
 	monstersCount
 	stopWhenHit 0
 	inLockOnly 0
-	notWhileSitting 1
+	notWhileSitting 0
 	notInTown 0
-	timeout 0
+	timeout
 	disabled 0
 	inInventory
 	manualAI 0
 }
 
-useSelf_item Red Herb, Apple, Potato, Carrot, Meat, Milk, Banana {
-	hp < 75%
-	sp
-	homunculus_hp
-	homunculus_sp
-	homunculus_dead
-	onAction
-	whenStatusActive
-	whenStatusInactive
-	whenFollowing
-	spirit
-	amuletType
-	aggressives
-	monsters
-	notMonsters
-	monstersCount
-	stopWhenHit 0
-	inLockOnly 0
-	notWhileSitting 1
-	notInTown 0
-	timeout 0
-	disabled 0
-	inInventory
-	manualAI 0
-}
-
-useSelf_item Monster's Feed {
-	hp < 70%
-	sp
-	homunculus_hp
-	homunculus_sp
-	homunculus_dead
-	onAction
-	whenStatusActive
-	whenStatusInactive
-	whenFollowing
-	spirit
-	amuletType
-	aggressives
-	monsters
-	notMonsters
-	monstersCount
-	stopWhenHit 0
-	inLockOnly 0
-	notWhileSitting 1
-	notInTown 0
-	timeout 0
-	disabled 0
-	inInventory
-	manualAI 0
-}
-
-useSelf_item Red Potion {
-	hp < 65%
-	sp
-	homunculus_hp
-	homunculus_sp
-	homunculus_dead
-	onAction
-	whenStatusActive
-	whenStatusInactive
-	whenFollowing
-	spirit
-	amuletType
-	aggressives
-	monsters
-	notMonsters
-	monstersCount
-	stopWhenHit 0
-	inLockOnly 0
-	notWhileSitting 1
-	notInTown 0
-	timeout 0
-	disabled 0
-	inInventory
-	manualAI 0
-}
-
-useSelf_item White Herb {
-	hp < 60%
-	sp
-	homunculus_hp
-	homunculus_sp
-	homunculus_dead
-	onAction
-	whenStatusActive
-	whenStatusInactive
-	whenFollowing
-	spirit
-	amuletType
-	aggressives
-	monsters
-	notMonsters
-	monstersCount
-	stopWhenHit 0
-	inLockOnly 0
-	notWhileSitting 1
-	notInTown 0
-	timeout 0
-	disabled 0
-	inInventory
-	manualAI 0
-}
-
-
-useSelf_item Awakening Potion {
-	hp
-	sp
-	homunculus_hp
-	homunculus_sp
-	homunculus_dead
-	onAction Attack
-	whenStatusActive
-	whenStatusInactive Awakening Potion
-	whenFollowing
-	spirit
-	amuletType
-	aggressives
-	monsters
-	notMonsters
-	monstersCount
-	stopWhenHit 0
-	inLockOnly 1
-	notWhileSitting 1
-	notInTown 1
-	timeout 5
-	disabled 0
-	inInventory
-	manualAI 0
-}
 ######## Autostorage/autosell ########
 
-buyAuto Awakening Potion {
-	npc izlude_in 115 61
+buyAuto {
+	npc
 	standpoint
 	distance 5
 	price
-	minAmount 0
-	maxAmount 5
-	disabled 1
+	minAmount 2
+	maxAmount 3
+	disabled 0
 }
 
-buyAuto Red Potion {
-	npc izlude_in 115 61
-	standpoint
-	distance 5
-	price
-	minAmount 1
-	maxAmount 200
-	disabled 1
-}
-
-buyAuto Butterfly Wing {
-	npc izlude_in 115 61
-	standpoint
-	distance 5
-	price
-	minAmount 1
-	maxAmount 5
-	disabled 1
-}
-
-buyAuto Fly Wing {
-	npc izlude_in 115 61
-	standpoint
-	distance 5
-	price
-	minAmount 1
-	maxAmount 20
-	disabled 1
-}
-buyAuto Potato {
-	#npc new_5-3 100 50
-	npc new_4-3 100 50
-	standpoint
-	distance 5
-	price
-	minAmount 1
-	maxAmount 50
-	disabled 1
-}
-sellAuto 1
-sellAuto_npc izlude_in 115 61
+sellAuto 0
+sellAuto_npc
 sellAuto_standpoint
 sellAuto_distance 5
 sellAuto_npc_steps s e
 
-storageAuto 1
-storageAuto_npc izlude 134 88
+storageAuto 0
+storageAuto_npc
 storageAuto_distance 5
 storageAuto_npc_type 1
 storageAuto_npc_steps
@@ -939,7 +719,7 @@ storageAuto_keepOpen 0
 storageAuto_useChatCommand
 storageAuto_notAfterDeath
 relogAfterStorage 0
-minStorageZeny 300
+minStorageZeny 50
 
 npcTimeResponse
 

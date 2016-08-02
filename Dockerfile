@@ -14,7 +14,8 @@ RUN yum -y update && \
 		perl-Archive-Tar.x86_64 \
 		perl-CPAN.x86_64 \
 		perl-Digest-SHA \
-		readline.x86_64
+		readline.x86_64 \
+		perl-libwww-perl
 		
 RUN yum clean all
 

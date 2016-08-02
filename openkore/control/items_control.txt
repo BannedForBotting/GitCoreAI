@@ -40,33 +40,22 @@
 # All items not mentioned in this file will be automatically stored in storage.
 all 0 1 0
 
-Free Ticket for Kafra Storage 500 0 0
-Free Ticket for Kafra Transportation 500 0 0
-Novice Potion 500 0 0
-Novice Fly Wing 500 0 0
-Novice Butterfly Wing 500 0 0
-Pecopeco Hariband 1 0 0
-Snake Head Hat [1] 1 0 0
+
 ##### HEAL/SUPPORT ITEMS #####
 # Adjust these to your needs
 
 Butterfly Wing 10 1 0
 Fly Wing 100 1 0
-Meat 100 1 0
-Monster's Feed 100 1 0
-Red Herb 100 1 0
-White Herb 100 1 0
-Concentration Potion 10 1 0
-Awakening Potion 10 1 0
+
 Blue Potion 0 1 0
 Condensed Red Potion 50 1 0
 Condensed White Potion 50 1 0
 Condensed Yellow Potion 50 1 0
 Green Potion 0 1 0
-Red Potion 200 1 0
-Orange Potion 200 1 0
-White Potion 200 1 0
-Yellow potion 200 1 0
+Red Potion 25 1 0
+Orange Potion 25 1 0
+White Potion 25 1 0
+Yellow potion 25 1 0
 
 ##### ARROWS #####
 # You may want to modify these if you're an archer/hunter
@@ -443,14 +432,14 @@ Maneater Blossom 0 0 1
 Maneater Root 0 0 1
 Mantis Scythe 0 0 1
 Matchstick 0 0 1
-#Meat 0 0 1
+Meat 0 0 1
 Memento 0 0 1
 Metal Fragment 0 0 1
 Milk 0 0 1
 Mould Powder 0 0 1
 Mole Claw 0 0 1
 Mole Whiskers 0 0 1
-#Monster's Feed 0 0 1
+Monster's Feed 0 0 1
 Moth Dust 0 0 1
 Mother's Letter 0 0 1
 Moth Wings 0 0 1

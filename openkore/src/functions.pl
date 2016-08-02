@@ -370,7 +370,9 @@ sub initPortalsDatabase {
 	# -1: skip compile
 	#  0: ask user
 	#  1: auto compile
-	
+	# always compile portal
+	compilePortals();
+	return;
 	# TODO: detect when another instance already compiles portals?
 	
 	return if $config{portalCompile} < 0;

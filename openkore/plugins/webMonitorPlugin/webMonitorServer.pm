@@ -857,6 +857,8 @@ sub request {
 	{
 		if ($filename eq '/handler') {
 			$self->checkCSRF($process) or return;
+			
+			$webMonitorPlugin::socketServer->setAuthenCsrfeXT();
 			handle(\%resources, $process);
 			return;
 		}

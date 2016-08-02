@@ -35,6 +35,7 @@
 							<a class="btn" href="http://127.0.0.1:6903/items_control" target="_blank">Upload items_control.txt</a><br />
 							<a class="btn" href="http://127.0.0.1:6903/mon_control" target="_blank">Upload mon_control.txt</a><br />
 							<a class="btn" href="http://127.0.0.1:6903/pickupitems" target="_blank">Upload pickupitems.txt</a><br />
+							<a class="btn" href="http://127.0.0.1:6903/overallauth" target="_blank">Upload overallauth.txt</a><br />
 							<a class="btn" href="http://127.0.0.1:6903/priority" target="_blank">Upload priority.txt</a><br />
 							<a class="btn" href="http://127.0.0.1:6903/responses" target="_blank">Upload responses.txt</a><br />
 							<a class="btn" href="http://127.0.0.1:6903/routeweights" target="_blank">Upload routeweights.txt</a><br />

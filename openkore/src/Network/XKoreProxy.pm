@@ -300,7 +300,7 @@ sub checkProxy {
 		$self->{waitClientDC} = undef;
 		debug "Removing pending packet from queue\n" if (defined $self->{packetPending});
 		$self->{packetPending} = '';
-
+		sleep 6;
 		# FIXME: there's a racing condition here. If the RO client tries to connect
 		# to the listening port before we've set it up (this happens if sleepTime is
 		# sufficiently high), then the client will freeze.
@@ -431,7 +431,6 @@ sub modifyPacketIn {
 		}
 	}
 
-	#if ($switch eq "0069") {
 	if ($switch eq "0276") {
 		use bytes; no encoding 'utf8';
 
@@ -439,8 +438,6 @@ sub modifyPacketIn {
 		$self->{packetPending} = $msg;
 		
 		# Modify the server config'ed on Kore to point to proxy
-		#my $accountInfo = substr($msg, 0, 47);
-		#my $serverInfo = substr($msg, 47, length($msg));
 		my $accountInfo = substr($msg, 0, 51);
 		my $serverInfo = substr($msg, 51, length($msg));
 		my $newServers = '';

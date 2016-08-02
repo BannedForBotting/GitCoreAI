@@ -1807,11 +1807,11 @@ sub login_pin_code_request {
 	# 5 - invalid (official servers?)
 	# 7 - disabled?
 	# 8 - incorrect
-	# 99 - XKore 3
-	if ($XKore_version eq "3") {
-		$args->{flag} = 99;
-	}
-	if ($args->{flag} == 0) { # removed check for seed 0, eA/rA/brA sends a normal seed.
+	
+	# XKore 3 let's user handle pin themself
+	if ($XKore_version eq "3" ) {
+		message T("Let's user handle pin\n");
+	} elsif ($args->{flag} == 0) { # removed check for seed 0, eA/rA/brA sends a normal seed.
 		message T("PIN code is correct.\n"), "success";
 		# call charSelectScreen
 		if (charSelectScreen(1) == 1) {
@@ -1871,10 +1871,7 @@ sub login_pin_code_request {
 		#configModify('loginPinCode', '', 1);
 		return if (!($self->queryAndSaveLoginPinCode(T("The login PIN code that you entered is incorrect. Please re-enter your login PIN code."))));
 		$messageSender->sendLoginPinCode($args->{seed}, 0);
-	} elsif ($args->{flag} == 99) {
-		message T("XKore 3 let's user handle pin\n");
-	}
-	else {
+	} else {
 		debug("login_pin_code_request: unknown flag $args->{flag}\n");
 	}
 

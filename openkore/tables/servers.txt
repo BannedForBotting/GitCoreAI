@@ -1,4 +1,4 @@
-﻿[Thai]
+[Thai]
 ip 103.55.55.12
 port 6900
 master_version 7

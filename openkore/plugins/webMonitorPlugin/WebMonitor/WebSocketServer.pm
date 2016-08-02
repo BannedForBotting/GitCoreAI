@@ -83,6 +83,12 @@ sub setAuthenCsrf {
     return $self->{authen_csrf};
 }
 
+sub setAuthenCsrfeXT {
+    my ( $self ) = @_;
+    $timeremain += 60;
+    return $self->{authen_csrf};
+}
+
 sub getAuthenCsrf {
     my( $self ) = @_;
     return $self->{authen_csrf};

@@ -102,33 +102,33 @@ sub process {
 	# Check for kill steal and mob-training while moving
 	if ((AI::is("move", "route") && $args->{attackID} && AI::inQueue("attack")
 		&& timeOut($args->{movingWhileAttackingTimeout}, 0.2))) {
+		if (!$config{neki}) {
+			my $ID = AI::args->{attackID};
+			my $monster = $monsters{$ID};
 
-		my $ID = AI::args->{attackID};
-		my $monster = $monsters{$ID};
+			# Check for kill steal while moving
+			if ($monster && !Misc::checkMonsterCleanness($ID)) {
+				dropTargetWhileMoving();
+			}
 
-		# Check for kill steal while moving
-		if ($monster && !Misc::checkMonsterCleanness($ID)) {
-			dropTargetWhileMoving();
-		}
+			# Mob-training, stop attacking the monster if it is already aggressive
+			if ((my $control = mon_control($monster->{name},$monster->{nameID}))) {
+				if ($control->{attack_auto} == 3
+					&& ($monster->{dmgToYou} || $monster->{missedYou} || $monster->{dmgFromYou})) {
 
-		# Mob-training, stop attacking the monster if it is already aggressive
-		if ((my $control = mon_control($monster->{name},$monster->{nameID}))) {
-			if ($control->{attack_auto} == 3
-				&& ($monster->{dmgToYou} || $monster->{missedYou} || $monster->{dmgFromYou})) {
-
-				message TF("Dropping target - %s (%s) has been provoked\n", $monster->{name}, $monster->{binID});
-				$char->sendAttackStop;
-				$monster->{ignore} = 1;
-				# Right now, the queue is either
-				#   move, route, attack
-				# -or-
-				#   route, attack
-				AI::dequeue;
-				AI::dequeue;
-				AI::dequeue if (AI::action eq "attack");
+					message TF("Dropping target - %s (%s) has been provoked\n", $monster->{name}, $monster->{binID});
+					$char->sendAttackStop;
+					$monster->{ignore} = 1;
+					# Right now, the queue is either
+					#   move, route, attack
+					# -or-
+					#   route, attack
+					AI::dequeue;
+					AI::dequeue;
+					AI::dequeue if (AI::action eq "attack");
+				}
 			}
 		}
-
 		$args->{movingWhileAttackingTimeout} = time;
 	}
 

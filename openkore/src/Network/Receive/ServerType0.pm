@@ -3228,7 +3228,6 @@ sub hp_sp_changed {
 sub login_error {
 	my ($self, $args) = @_;
 
-	
 	if ($args->{type} == REFUSE_INVALID_ID) {
 		error TF("Account name [%s] doesn't exist\n", $config{'username'}), "connection";
 		if (!$net->clientAlive() && !$config{'ignoreInvalidLogin'} && !UNIVERSAL::isa($net, 'Network::XKoreProxy')) {
@@ -3287,9 +3286,7 @@ sub login_error {
 		$versionSearch = 0;
 		writeSectionedFileIntact(Settings::getTableFilename("servers.txt"), \%masterServers);
 	}
-	message "Pausing for 6 second(s)...\n", "system";
-	sleep 6;
-	$net->serverDisconnect();
+	#$net->serverDisconnect();
 }
 
 sub login_error_game_login_server {

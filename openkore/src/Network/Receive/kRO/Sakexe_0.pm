@@ -2880,7 +2880,7 @@ sub hp_sp_changed {
 sub login_error {
 	my ($self, $args) = @_;
 
-	$net->serverDisconnect();
+	#$net->serverDisconnect();
 	if ($args->{type} == REFUSE_INVALID_ID) {
 		error TF("Account name [%s] doesn't exist\n", $config{'username'}), "connection";
 		if (!$net->clientAlive() && !$config{'ignoreInvalidLogin'} && !UNIVERSAL::isa($net, 'Network::XKoreProxy')) {

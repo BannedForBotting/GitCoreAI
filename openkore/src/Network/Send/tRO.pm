@@ -12,13 +12,7 @@
 # tRO (Thai)
 package Network::Send::tRO;
 use strict;
-use Globals;
-use Network::Send::ServerType0;
 use base qw(Network::Send::ServerType0);
-use Log qw(error debug);
-use I18N qw(stringToBytes);
-use Utils qw(getTickCount getHex getCoordString);
-use Math::BigInt;
 
 sub new {
 	my ($class) = @_;
@@ -27,10 +21,17 @@ sub new {
 	my %packets = (
 		'0A76' => ['master_login', 'V Z40 a32 C', [qw(version username password_rijndael master_version)]],
 		'0275' => ['game_login', 'a4 a4 a4 v C x16 v', [qw(accountID sessionID sessionID2 userLevel accountSex iAccountSID)]],
-		'0A7C' => ['gameguard_reply'],
-		);
-	$self->{packet_list}{$_} = $packets{$_} for keys %packets;
-
+		'0A7C' => ['gameguard_ack'],
+		'00A7' => ['sendItemUse'],
+		'00BB' => ['sendAddStatusPoint'],
+		'00F7' => ['sendStorageClose'],
+		'0112' => ['sendAddSkillPoint'],
+		'0130' => ['sendEnteringVender'],
+		'00E4' => ['sendDeal'],
+		'00BF' => ['sendEmotion'],
+	);
+	
+	$self->{packet_list}{$_} = $packets{$_} for keys %packets;	
 	
 	my %handlers = qw(
 		master_login 0A76
@@ -53,7 +54,7 @@ sub new {
 	);
 	
 	$self->{packet_lut}{$_} = $handlers{$_} for keys %handlers;
-	#$self->cryptKeys(0x4d8e77b2, 0x6e7b6757, 0x46ae0414);
+	#$self->cryptKeys(0x0, 0x0, 0x0);
 	return $self;
 }
 

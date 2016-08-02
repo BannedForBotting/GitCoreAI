@@ -203,6 +203,8 @@ sub clientSend {
 	if ($switch eq "02AE") { #initialize_message_id_encryption
 		$msg = "";
 	}
+	
+	$self->{client}->send("R".pack("v", length($msg)).$msg) if ($self->clientAlive);
 }
 
 sub clientDisconnect {

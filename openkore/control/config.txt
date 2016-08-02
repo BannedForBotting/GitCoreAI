@@ -11,7 +11,7 @@ webDBLink_item	http://ratemyserver.net/index.php?page=item_db&item_id=%s
 ######## Login options and server-specific options ########
 
 master Thai
-server 2
+server 3
 username
 password
 loginPinCode

@@ -133,9 +133,7 @@ sub new {
 		'0987' => ['master_login', 'V Z24 a32 C', [qw(version username password_md5_hex master_version)]],
 		'0998' => ['send_equip', 'v V', [qw(index type)]],#8
 		'09A1' => ['sync_received_characters'],
-		#TRO RO EXE
-		#'09D0' => ['gameguard_reply'],
-		'0A7C' => ['gameguard_reply'],
+		'09D0' => ['gameguard_reply'],
 		#'08BE' => ['change_pin_password','a*', [qw(accountID oldPin newPin)]], # TODO: PIN change system/command?
 	);
 	$self->{packet_list}{$_} = $packets{$_} for keys %packets;

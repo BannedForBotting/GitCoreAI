@@ -244,6 +244,8 @@ sub errorDialog {
 	} else {
 		$self->writeOutput("message", Translation::T("Press ENTER to continue...\n"), "console")
 	}
+	#force exit
+	exit 1;
 	$self->getInput(-1);
 }
 

@@ -578,6 +578,8 @@ sub w32mWheel {
 
 sub OnExit{
 	my $self = shift;
+	#force exit;
+	exit();
 	if ($conState) {
 		push(@{ $self->{input_que} }, "\n");
 		quit();

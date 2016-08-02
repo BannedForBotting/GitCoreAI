@@ -229,7 +229,44 @@ sub ParsePacket
 	# eAthena or Freya as the emulator, or figure out the correct packet switches and include them in the
 	# if..elsif..else blocks.
 
-	if (($switch eq '01DB') || ($switch eq '0204')) { # client sends login packet 0204 packet thanks to elhazard
+	if ($switch eq '0A76') { # TRO client sends login packet 0A76 packet
+
+		my $sex = 1;
+		my $serverName = pack("a20", "Poseidon server"); # server name should be less than or equal to 20 characters
+		my $serverUsers = pack("V", @{$self->clients()} - 1);
+		
+		my $data;
+		#'0276' => ['account_server_info', 'x2 a4 a4 a4 a4 a26 C a4 a*', [qw(sessionID accountID sessionID2 lastLoginIP lastLoginTime accountSex iAccountSID serverInfo)]],
+		$data = pack("C*", 0x76, 0x02, 0x53, 0x00) . 
+			$sessionID . $accountID . $sessionID2 .
+			pack("x30") . pack("C1", $sex) . pack("x4") .
+			pack("C*", $ipElements[0], $ipElements[1], $ipElements[2], $ipElements[3]) .
+			$port .	$serverName . $serverUsers . pack("x2");
+
+		$client->send($data);
+
+		# save servers.txt info
+		$clientdata{$index}{version} = unpack("V", substr($msg, 2, 4));
+		$clientdata{$index}{master_version} = unpack("C", substr($msg, length($msg) - 1, 1));
+		if ($switch eq '01DD') {
+			$clientdata{$index}{secureLogin} = 1;
+			undef $clientdata{$index}{secureLogin_account};
+		} elsif ($switch eq '01FA') {
+			$clientdata{$index}{secureLogin} = 3;
+			$clientdata{$index}{secureLogin_account} = unpack("C", substr($msg, 47, 1));
+		} else {
+			undef $clientdata{$index}{secureLogin};
+			undef $clientdata{$index}{secureLogin_type};
+			undef $clientdata{$index}{secureLogin_account};
+			undef $clientdata{$index}{secureLogin_requestCode};
+		}
+		if (($switch ne '01DD') && ($switch ne '01FA') && ($switch ne '0064')) {
+			$clientdata{$index}{masterLogin_packet} = $switch;
+		} else {
+			undef $clientdata{$index}{masterLogin_packet};
+		}		
+
+	} elsif (($switch eq '01DB') || ($switch eq '0204')) { # client sends login packet 0204 packet thanks to elhazard
 
 		# '01DC' => ['secure_login_key', 'x2 a*', [qw(secure_key)]],
 		my $data = pack("C*", 0xdc, 0x01, 0x14) . pack("x17");
@@ -307,11 +344,23 @@ sub ParsePacket
 			$clientdata{$index}{kRO} = 1;
 		}
 
-	} elsif (($switch eq '0065') || ($switch eq '0275') || ($msg =~ /^$packed_switch$accountID$sessionID$sessionID2\x0\x0.$/)) { # client sends server choice packet
+	} elsif ($switch eq '0275') { # client sends server choice packet
 
+		my $unknow;
+		$unknow = pack("C*", 0x1F, 0x50, 0x03, 0x00);
+		$client->send($unknow);
+		
+		my $char_info_data;
+		$char_info_data = $char_info_data . pack("v2 C5 x20", 0x82d, 29, 6,0,0,6,6);
+		$client->send($char_info_data);
+		my $sync_recv_char;
+		$sync_recv_char = $sync_recv_char . pack("v1 C1 x3", 0x9a0, 0x2);
+		$client->send($sync_recv_char);
+		
+	} elsif (($switch eq '0065') || ($msg =~ /^$packed_switch$accountID$sessionID$sessionID2\x0\x0.$/)) { # client sends server choice packet
 		# Character List
 		SendCharacterList($self, $client, $msg, $index);
-
+		
 		# save servers.txt info
 		if ($switch ne '0065') {
 			$clientdata{$index}{gameLogin_packet} = $switch;
@@ -319,6 +368,14 @@ sub ParsePacket
 			undef $clientdata{$index}{gameLogin_packet};
 		}
 
+	} elsif ($switch eq '09A1') { # TRO ADD
+
+		SendCharacterList($self, $client, $msg, $index);
+		my $pin_data;
+		#'08B9' => ['login_pin_code_request', 'V a4 v', [qw(seed accountID flag)]],
+		$pin_data = $pin_data . pack("V v a4 v", 0x8b9, 0, $accountID, 0x07); # 29 Tro Fix
+		$client->send($pin_data);
+				
 	} elsif ($switch eq '0066') { # client sends character choice packet
 
 		# If Using Packet Encrypted Client
@@ -492,9 +549,36 @@ sub ParsePacket
 		) { # client sends the maplogin packet
 
 		$client->send(pack("v a4", 0x0283, $accountID));
+			
+		my $data;
 		# mapLogin packet
-		$client->send(pack("H536", "eb0206ad09222b56c0050500000f012c010100000000000900000001004e565f42415349430000000000000000080000000f0000000030000000000000000000010054465f444f55424c4500000000000000090000000f0000000131000000000000000000010054465f4d495353000000000000000000070000000f0000000132000100000000000a00010054465f535445414c0000000000000000080000000f0000000133000400000000000a00010054465f484944494e4700000000000000090000000f0000000034000100000000000c00020054465f504f49534f4e00000000000000090000000f0000000135001000000000000a00090054465f4445544f5849465900000000000b0000000f000000008e00040000000100030001004e565f464952535441494400000000000b0000000f00000000d701df145a000200000000d701df145a0003000000003a010100d701df145a0002f13200003a010100b0001900d06b0000b0001800b2110000b102080000000000b202080000000000b0002a003f000000b0002b0000000000b0002e002d000000b000300000000000d9070039020000000000000000000000000000000000000000000000000000233000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"));
-		$client->{connectedToMap} = 1;
+		#$client->send(pack("H26", "eb0206ad09222b56c005050000"));
+		#sleep 1;
+		#if ( $config{server_type} !~ /^bRO/ ) { $data .= $accountID; } #<- This is Server Type Based !!
+		$data .= pack("C*", 0xEB, 0x02) . pack("V", getTickCount) . getCoordString($posX, $posY, 1) . pack("C*", 0x05, 0x05, 0x00, 0x00);
+		
+
+		if ($clientdata{$index}{mode}) {
+			$data .= pack("C2 v1", 0x0F, 0x01, 226) .
+				# skillID targetType level sp range skillName
+				pack("v2 x2 v3 a24 C1", 1, 0, 9, 0, 1, "NV_BASIC" . chr(0) . "GetMapInfo" . chr(0x0A), 0) .
+				pack("v2 x2 v3 a24 C1", 24, 4, 1, 10, 10, "AL_RUWACH", 0) . # self skill test
+				pack("v2 x2 v3 a24 C1", 25, 2, 1, 10, 9, "AL_PNEUMA", 0) . # location skill test
+				pack("v2 x2 v3 a24 C1", 26, 4, 2, 9, 1, "AL_TELEPORT", 0) . # self skill test
+				pack("v2 x2 v3 a24 C1", 27, 2, 4, 26, 9, "AL_WARP", 0) . # location skill test
+				pack("v2 x2 v3 a24 C1", 28, 16, 10, 40, 9, "AL_HEAL", 0); # target skill test
+		} else {
+			$data .= pack("C2 v1", 0x0F, 0x01, 226) .
+			pack("v2 x2 v3 a24 C1", 1, 0, 9, 0, 1, "NV_BASIC" . chr(0) . "GetMapInfo" . chr(0x0A), 0) .
+			pack("v2 x2 v3 a24 C1", 24, 4, 1, 10, 10, "AL_RUWACH", 0) . # self skill test
+			pack("v2 x2 v3 a24 C1", 25, 2, 1, 10, 9, "AL_PNEUMA", 0) . # location skill test
+			pack("v2 x2 v3 a24 C1", 26, 4, 2, 9, 1, "AL_TELEPORT", 0) . # self skill test
+			pack("v2 x2 v3 a24 C1", 27, 2, 4, 26, 9, "AL_WARP", 0) . # location skill test
+			pack("v2 x2 v3 a24 C1", 28, 16, 10, 40, 9, "AL_HEAL", 0); # target skill test
+		
+		}
+		$client->send($data);
+		 $client->{connectedToMap} = 1;	
 
 	} elsif ($msg =~ /^$packed_switch/
 		&& $msg =~ /$accountID/
@@ -510,23 +594,23 @@ sub ParsePacket
 		#$clientdata{$index}{sendMapLogin} = $msg;
 
 	} elsif ($switch eq '007D') { # client sends the map loaded packet
-		my $data;
+			my $data;
 
 		# Temporary Hack to Initialized Crypted Client
-		if ( $self->{type}->{$config{server_type}}->{decrypt_mid_keys} )
-		{
-			for ( my $i = 0 ; $i < 64 ; $i++ ) 
-			{
-				$client->send(pack("C C", 0x70, 0x08));
+		# if ( $self->{type}->{$config{server_type}}->{decrypt_mid_keys} )
+		# {
+			# for ( my $i = 0 ; $i < 64 ; $i++ ) 
+			# {
+				# $client->send(pack("C C", 0x70, 0x08));
 				
-				# Forcedly Calculating the Next Decryption Key
-				$enc_val1 = $enc_val1->bmul($enc_val3)->badd($enc_val2) & 0xFFFFFFFF;	
-			}
-		}		
+				# # Forcedly Calculating the Next Decryption Key
+				# $enc_val1 = $enc_val1->bmul($enc_val3)->badd($enc_val2) & 0xFFFFFFFF;	
+			# }
+		# }		
 		
 		PerformMapLoadedTasks($self, $client, $msg, $index);
 	} elsif (
-		( ( ($switch eq '007E') || ($switch eq '035F') ) && (($clientdata{$index}{serverType} == 0) || ($clientdata{$index}{serverType} == 1) || ($clientdata{$index}{serverType} == 2) || ($clientdata{$index}{serverType} == 6) || ($clientdata{$index}{serverType} == 7) || ($clientdata{$index}{serverType} == 10) || ($clientdata{$index}{serverType} == 11))) ||
+		( ( ($switch eq '007E') || ($switch eq '0360') ) && (($clientdata{$index}{serverType} == 0) || ($clientdata{$index}{serverType} == 1) || ($clientdata{$index}{serverType} == 2) || ($clientdata{$index}{serverType} == 6) || ($clientdata{$index}{serverType} == 7) || ($clientdata{$index}{serverType} == 10) || ($clientdata{$index}{serverType} == 11))) ||
 		(($switch eq '0089') && (($clientdata{$index}{serverType} == 3) || ($clientdata{$index}{serverType} == 5) || ($clientdata{$index}{serverType} == 8) || ($clientdata{$index}{serverType} == 9))) ||
 		(($switch eq '0116') && ($clientdata{$index}{serverType} == 4)) ||
 		(($switch eq '00A7') && ($clientdata{$index}{serverType} == 12))
@@ -535,10 +619,20 @@ sub ParsePacket
 		$client->send($data);
 
 		### Check if packet 0228 got tangled up with the sync packet
-		if (uc(unpack("H2", substr($msg, 7, 1))) . uc(unpack("H2", substr($msg, 6, 1))) eq '0228') {
+		#if (uc(unpack("H2", substr($msg, 7, 1))) . uc(unpack("H2", substr($msg, 6, 1))) eq '0228') {
+		if (uc(unpack("H2", substr($msg, 7, 1))) . uc(unpack("H2", substr($msg, 6, 1))) eq '0A7C') {
 			# queue the response (thanks abt123)
 			$self->{response} = pack("v", $packet_id) . substr($msg, 8, length($msg)-2);
 			$self->{state} = 'requested';
+			#if (1==0) {
+				#'0092' => ['map_changed', 'Z16 v2 a4 v', [qw(map x y IP port)]], # 28
+				my $mapName = pack("a16", "moc_prydb1.gat");
+				my $data = pack("C*", 0x92, 0x00) . $mapName . pack("C*", $posX, 0x00, $posY, 0x00) . 
+				pack("C*", $ipElements[0], $ipElements[1], $ipElements[2], $ipElements[3]) . $port;
+			
+				$client->send($data);
+				$client->{connectedToMap} = 0;	
+			#}
 		}
 
 	} elsif ($switch eq '00B2') { # quit to character select screen
@@ -557,7 +651,8 @@ sub ParsePacket
 		
 		SendQuitGame($self, $client, $msg, $index);
 
-	} elsif ($switch eq '0228') { # client sends game guard sync
+	#} elsif ($switch eq '0228') { # client sends game guard sync
+	} elsif ($switch eq '0A7C') { # client sends game guard sync
 		# Queue the response
 		# Don't allow other packet's (like Sync) to get to RO server.
 		my $length = unpack("v",substr($msg,2,2));
@@ -567,26 +662,47 @@ sub ParsePacket
 			$self->{response} = pack("v", $packet_id);
 		};
 		$self->{state} = 'requested';
-	
+		
+		#if (1==0) {
+			#'0092' => ['map_changed', 'Z16 v2 a4 v', [qw(map x y IP port)]], # 28
+			my $mapName = pack("a16", "moc_prydb1.gat");
+			my $data = pack("C*", 0x92, 0x00) . $mapName . pack("C*", $posX, 0x00, $posY, 0x00) . 
+			pack("C*", $ipElements[0], $ipElements[1], $ipElements[2], $ipElements[3]) . $port;
+		
+			$client->send($data);
+			$client->{connectedToMap} = 0;	
+		#}
 	} elsif ($switch eq '02A7') { # client sends hShield response
+	#} elsif ($switch eq '0A7C') { # client sends hShield response
 		# Queue the response
 		$self->{response} = $msg;
 		$self->{state} = 'requested';
-
-	} elsif ($switch eq '0258') { # client sent gameguard's challenge request
-		# Reply with "gameguard_grant" instead of a 0227 packet. Normally, the server would
-		# send a 0227 gameguard challenge to the client, then the client will send the
-		# proper 0228 response. Only after that will the server send 0259 to allow the
-		# client to continue the login sequence. Since this is just a fake server,
-		# there is no need to go through all that and we can do a shortcut.
-		if ($self->{challengeNum} == 0) {
-			print "Received GameGuard sync request. Client allowed to login account server.\n";
-			$client->send(pack("C*", 0x59, 0x02, 0x01));
-		} else {
-			print "Received GameGuard sync request. Client allowed to login char/map server.\n";
-			$client->send(pack("C*", 0x59, 0x02, 0x02));
-		}
-		$self->{challengeNum}++;
+		
+		#if (1==0) {
+			#'0092' => ['map_changed', 'Z16 v2 a4 v', [qw(map x y IP port)]], # 28
+			my $mapName = pack("a16", "moc_prydb1.gat");
+			my $data = pack("C*", 0x92, 0x00) . $mapName . pack("C*", $posX, 0x00, $posY, 0x00) . 
+			pack("C*", $ipElements[0], $ipElements[1], $ipElements[2], $ipElements[3]) . $port;
+		
+			$client->send($data);
+			$client->{connectedToMap} = 0;	
+		#}
+		
+	# we don't need this atm
+	# } elsif ($switch eq '0258') { # client sent gameguard's challenge request
+		# # Reply with "gameguard_grant" instead of a 0227 packet. Normally, the server would
+		# # send a 0227 gameguard challenge to the client, then the client will send the
+		# # proper 0228 response. Only after that will the server send 0259 to allow the
+		# # client to continue the login sequence. Since this is just a fake server,
+		# # there is no need to go through all that and we can do a shortcut.
+		# if ($self->{challengeNum} == 0) {
+			# print "Received GameGuard sync request. Client allowed to login account server.\n";
+			# $client->send(pack("C*", 0x59, 0x02, 0x01));
+		# } else {
+			# print "Received GameGuard sync request. Client allowed to login char/map server.\n";
+			# $client->send(pack("C*", 0x59, 0x02, 0x02));
+		# }
+		# $self->{challengeNum}++;
 	} else {
 		if ($switch eq '0090' || ($msg =~ /\x90\x0($npcID1|$npcID0)/)) { # npc talk
 			undef $clientdata{$index}{npc_talk_code};
@@ -818,12 +934,13 @@ sub SendCharacterList
 
 	# Packet Len, Total Characters and Total Slots
 	my $totalchars = 2;
-	my $totalslots = 12;
+	my $totalslots = 6;
 	my $len = $blocksize * $totalchars;
 	
 	# Character Block Pack String
 	my $packstring = '';
-
+	# update from receive.pm
+	$packstring = 'a4 V9 v V2 v14 Z24 C8 v Z16 V x4 x4 x4' if $blocksize == 147;
 	$packstring = 'a4 V9 v V2 v14 Z24 C8 v Z16 V x4 x4 x4' if $blocksize == 144;
 	$packstring = 'a4 V9 v V2 v14 Z24 C8 v Z16 x4 x4' if $blocksize == 136;
 	$packstring = 'a4 V9 v V2 v14 Z24 C8 v Z16 x4' if $blocksize == 132;
@@ -832,24 +949,51 @@ sub SendCharacterList
 	$packstring = 'a4 V9 v V2 v14 Z24 C6 v2' if $blocksize == 112;
 	$packstring = 'a4 V9 v17 Z24 C6 v2' if $blocksize == 108;
 	$packstring = 'a4 V9 v17 Z24 C6 v' if $blocksize == 106;
-	
+		
 	# Unknown CharBlockSize
 	if ( length($packstring) == 0 ) { print "Unknown CharBlockSize : $blocksize\n"; return; }
 	
 	# Character Block Format
-	my($cID,$exp,$zeny,$jobExp,$jobLevel,$opt1,$opt2,$option,$stance,$manner,$statpt,$hp,$maxHp,$sp,$maxSp,$walkspeed,$jobId,$hairstyle,$weapon,$level,$skillpt,$headLow,$shield,$headTop,$headMid,$hairColor,$clothesColor,$name,$str,$agi,$vit,$int,$dex,$luk,$slot,$rename) = 0;
+	my($cID,$exp,$zeny,$jobExp,$jobLevel,$opt1,$opt2,$option,$stance,$manner,$statpt,$hp,$maxHp,$sp,$maxSp,$walkspeed,$jobId,$hairstyle,$weapon,$level,$skillpt,$headLow,$shield,$headTop,$headMid,$hairColor,$clothesColor,$name,$str,$agi,$vit,$int,$dex,$luk,$slot,$rename, $unknown, $mapname, $deleteDate) = 0;
 
 	# Preparing Begin of Character List Packet
 	my $data;
-	if ($self->{type}->{$config{server_type}}->{charListPacket} eq '0x82d') {
+	# Character Block
+	my $block;
+	if ($self->{type}->{$config{server_type}}->{charListPacket} eq '0x99d') {
+		
+		# Measuring Size of Block
+		#'099D' => ['received_characters', 'v a*', [qw(len charInfo)]],
+		$data = $data . pack("v2", 0x99d, $len+4); # 144 + header(2) + len(2)
+		
+		$cID = $charID;	$hp = 10000; $maxHp = 10000; $sp = 10000; $maxSp = 10000; $hairstyle = 1; $level = 99; $headTop = 0; $hairColor = 6;
+		$name = "Poseidon"; $str = 1; $agi = 1; $vit = 1; $int = 1; $dex = 1; $luk = 1;	$exp = 1; $zeny = 1; $jobExp = 1; $jobLevel = 50; $slot = 0; $rename = 0; $unknown = 0; $mapname = "moc_prydb1.gat"; $deleteDate = 0;
+		$block = pack($packstring,$cID,$exp,$zeny,$jobExp,$jobLevel, $opt1, $opt2, $option, $stance, $manner, $statpt,
+			$hp,$maxHp,$sp,$maxSp, $walkspeed, $jobId,$hairstyle, $weapon, $level, $skillpt,$headLow, $shield,$headTop,$headMid,$hairColor,
+			$clothesColor,$name,$str,$agi,$vit,$int,$dex,$luk,$slot, $rename, $unknown, $mapname, $deleteDate);
+		# Attaching Block
+		$data .= $block;
+		# Filling Character 2 Block
+		$cID = $charID;	$hp = 10000; $maxHp = 10000; $sp = 10000; $maxSp = 10000; $hairstyle = 1; $level = 99; $headTop = 0; $hairColor = 6;
+		$name = "Poseidon Dev"; $str = 1; $agi = 1; $vit = 1; $int = 1; $dex = 1; $luk = 1;	$exp = 1; $zeny = 1; $jobExp = 1; $jobLevel = 50; $slot = 1; $rename = 0; $unknown = 1; $mapname = "moc_prydb1.gat"; $deleteDate = 0;
+		# Preparing Character 2 Block
+		$block = pack($packstring,$cID,$exp,$zeny,$jobExp,$jobLevel, $opt1, $opt2, $option, $stance, $manner, $statpt,
+			$hp,$maxHp,$sp,$maxSp, $walkspeed, $jobId,$hairstyle, $weapon, $level, $skillpt,$headLow, $shield,$headTop,$headMid,$hairColor,
+			$clothesColor,$name,$str,$agi,$vit,$int,$dex,$luk,$slot, $rename, $unknown, $mapname, $deleteDate);
+			
+		# Attaching Block
+		$data .= $block;		
+		print "Wanted CharBlockSize : $blocksize\n";	
+		print "Built CharBlockSize : " . length($block) . "\n";
+		$client->send($data);
+		return;
+	
+	} elsif ($self->{type}->{$config{server_type}}->{charListPacket} eq '0x82d') {
 		$data = $accountID . pack("v2 C5 a20", 0x82d, $len + 29,$totalchars,0,0,0,$totalchars,-0); # 29 = v2 C5 a20 size for bRO
 	} else {
 		$data = $accountID . pack("v v C3", 0x6b, $len + 7, $totalslots, -1, -1);
 	}
-	
-	# Character Block
-	my $block;
-	
+
 	# Filling Character 1 Block
 	$cID = $charID;	$hp = 10000; $maxHp = 10000; $sp = 10000; $maxSp = 10000; $hairstyle = 1; $level = 99; $headTop = 0; $hairColor = 6;
 	$name = "Poseidon"; $str = 1; $agi = 1; $vit = 1; $int = 1; $dex = 1; $luk = 1;	$exp = 1; $zeny = 1; $jobExp = 1; $jobLevel = 50; $slot = 0; $rename = 0;
@@ -880,26 +1024,58 @@ sub SendCharacterList
 sub SendMapLogin {
 	my ($self, $client, $msg, $index) = @_;
 
-	# '0073' => ['map_loaded','x4 a3',[qw(coords)]]
-	my $data;
-	
-	if ( $config{server_type} !~ /^bRO/ ) { $data .= $accountID; } #<- This is Server Type Based !!
-	$data .= pack("C*", 0x73, 0x00) . pack("V", getTickCount) . getCoordString($posX, $posY, 1) . pack("C*", 0x05, 0x05);
+			$client->send(pack("v a4", 0x0283, $accountID));
+			
+		my $data;
+		# mapLogin packet
+		#$client->send(pack("H26", "eb0206ad09222b56c005050000"));
+		#sleep 1;
+		#if ( $config{server_type} !~ /^bRO/ ) { $data .= $accountID; } #<- This is Server Type Based !!
+		$data .= pack("C*", 0xEB, 0x02) . pack("V", getTickCount) . getCoordString($posX, $posY, 1) . pack("C*", 0x05, 0x05, 0x00, 0x00);
+		
 
-	if ($clientdata{$index}{mode}) {
-		$data .= pack("C2 v1", 0x0F, 0x01, 226) .
-			# skillID targetType level sp range skillName
+		if ($clientdata{$index}{mode}) {
+			$data .= pack("C2 v1", 0x0F, 0x01, 226) .
+				# skillID targetType level sp range skillName
+				pack("v2 x2 v3 a24 C1", 1, 0, 9, 0, 1, "NV_BASIC" . chr(0) . "GetMapInfo" . chr(0x0A), 0) .
+				pack("v2 x2 v3 a24 C1", 24, 4, 1, 10, 10, "AL_RUWACH", 0) . # self skill test
+				pack("v2 x2 v3 a24 C1", 25, 2, 1, 10, 9, "AL_PNEUMA", 0) . # location skill test
+				pack("v2 x2 v3 a24 C1", 26, 4, 2, 9, 1, "AL_TELEPORT", 0) . # self skill test
+				pack("v2 x2 v3 a24 C1", 27, 2, 4, 26, 9, "AL_WARP", 0) . # location skill test
+				pack("v2 x2 v3 a24 C1", 28, 16, 10, 40, 9, "AL_HEAL", 0); # target skill test
+		} else {
+			$data .= pack("C2 v1", 0x0F, 0x01, 226) .
 			pack("v2 x2 v3 a24 C1", 1, 0, 9, 0, 1, "NV_BASIC" . chr(0) . "GetMapInfo" . chr(0x0A), 0) .
 			pack("v2 x2 v3 a24 C1", 24, 4, 1, 10, 10, "AL_RUWACH", 0) . # self skill test
 			pack("v2 x2 v3 a24 C1", 25, 2, 1, 10, 9, "AL_PNEUMA", 0) . # location skill test
 			pack("v2 x2 v3 a24 C1", 26, 4, 2, 9, 1, "AL_TELEPORT", 0) . # self skill test
 			pack("v2 x2 v3 a24 C1", 27, 2, 4, 26, 9, "AL_WARP", 0) . # location skill test
 			pack("v2 x2 v3 a24 C1", 28, 16, 10, 40, 9, "AL_HEAL", 0); # target skill test
-	}
+		
+		}
+		$client->send($data);
+		$client->{connectedToMap} = 1;	
+		
+	# # '0073' => ['map_loaded','x4 a3',[qw(coords)]]
+	# my $data;
 	
-	$client->send($data);
+	# if ( $config{server_type} !~ /^bRO/ ) { $data .= $accountID; } #<- This is Server Type Based !!
+	# $data .= pack("C*", 0x73, 0x00) . pack("V", getTickCount) . getCoordString($posX, $posY, 1) . pack("C*", 0x05, 0x05);
+
+	# if ($clientdata{$index}{mode}) {
+		# $data .= pack("C2 v1", 0x0F, 0x01, 226) .
+			# # skillID targetType level sp range skillName
+			# pack("v2 x2 v3 a24 C1", 1, 0, 9, 0, 1, "NV_BASIC" . chr(0) . "GetMapInfo" . chr(0x0A), 0) .
+			# pack("v2 x2 v3 a24 C1", 24, 4, 1, 10, 10, "AL_RUWACH", 0) . # self skill test
+			# pack("v2 x2 v3 a24 C1", 25, 2, 1, 10, 9, "AL_PNEUMA", 0) . # location skill test
+			# pack("v2 x2 v3 a24 C1", 26, 4, 2, 9, 1, "AL_TELEPORT", 0) . # self skill test
+			# pack("v2 x2 v3 a24 C1", 27, 2, 4, 26, 9, "AL_WARP", 0) . # location skill test
+			# pack("v2 x2 v3 a24 C1", 28, 16, 10, 40, 9, "AL_HEAL", 0); # target skill test
+	# }
 	
-	$client->{connectedToMap} = 1;	
+	# $client->send($data);
+	
+	# $client->{connectedToMap} = 1;	
 }
 
 sub SendGoToCharSelection
@@ -1032,6 +1208,9 @@ sub PerformMapLoadedTasks
 {
 	my ($self, $client, $msg, $index) = @_;
 	
+	$client->{connectedToMap} = 1;	
+
+	##*****
 	# Looking to Front
 	SendLookTo($self, $client, $msg, $index, $accountID, 4);
 	

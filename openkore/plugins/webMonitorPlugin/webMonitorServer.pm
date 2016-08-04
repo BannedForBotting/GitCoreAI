@@ -797,7 +797,9 @@ sub request {
 			'characterLocationX' => $char->position()->{x},
 			'characterLocationY' => $char->position()->{y},
 			'characterLocationMap' => $field->name,
-			'characterLocationMapURL' => sprintf('http://rode.doddlercon.com/db/images/maps/small/%s.png', $field->name ),
+			'characterLocationMapWidth' => $field->width,
+			'characterLocationMapHeight' => $field->height,
+			'characterLocationMapURL' => sprintf('http://www.divine-pride.net/img/map/raw/%s', $field->name ),
 			'characterLocationDescription' => $field->descString,
 			'characterGetRouteX' => $char->{pos_to}->{x}, # Never used
 			'characterGetRouteY' => $char->{pos_to}->{y}, # Never used

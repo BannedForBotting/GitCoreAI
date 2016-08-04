@@ -36,6 +36,73 @@
 			c.fillStyle = '#ff0000'
 			c.fillRect(150, 150, 5, 3)
 		})
+		
+
+		var ctx = null ; 
+		var map_width = 0;
+		var map_height = 0;
+		var map_lpx = 0;
+		var map_lpy = 0;
+		var mx = 0;
+		var my = 0;
+		function drawpos()
+		{
+			if( ctx == null )
+			{
+				var c = document.getElementById("map");
+				if (c == null) 
+				{
+					return;
+				}
+				ctx = c.getContext("2d");
+				if (ctx == null) 
+				{
+					return;
+				}
+				if( map_height != 0 && map_width != 0)
+				{
+					ctx.canvas.height = map_height;
+					ctx.canvas.width = map_width;
+				}
+				ctx.save();
+
+
+				c.addEventListener('click', function(event) {
+					
+					var rect = this.getBoundingClientRect();
+					mx = event.clientX - rect.left;
+					my = event.clientY - rect.top;
+					
+					var csrf = parseInt($('.csrf').text());
+					if( mx > 0 && my > 0 && mx < ctx.canvas.height && my < ctx.canvas.width )
+					{
+						window.location.href = '../handler?csrf=' + csrf + '&command=move ' + Math.floor(my) + ' ' + Math.floor(mx);
+					}
+
+				}, false);
+				
+				c.addEventListener('mousemove', function(event) {
+					var rect = this.getBoundingClientRect();
+					mx = event.clientX - rect.left;
+					my = event.clientY - rect.top;
+				
+				}, false);
+			}
+
+			ctx.setTransform(1, 0, 0, 1, 0, 0);
+			ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+			ctx.restore();
+			ctx.beginPath();
+			ctx.arc(map_lpx, ctx.canvas.width - map_lpy, 2, 0, 2 * Math.PI);
+			ctx.fillStyle = 'white';
+			ctx.fill();
+			ctx.lineWidth = 2;
+			ctx.strokeStyle = '#FF0000';
+			ctx.stroke();
+		}
+		map_lpx = parseInt($('.value_char_pos_x').text());
+		map_lpy = parseInt($('.value_char_pos_y').text());
+		drawpos();
 
 		var socketAddr, socket;
 		if (typeof WebSocket !== 'undefined' && CONFIG.socketPort) {
@@ -83,8 +150,35 @@
 
 							switch (key) {
 								case 'field_image':
-									$('#map').css({'background-image': 'url("' + value + '")'});
-								break;
+								{
+									$('#map').css({'background-image': 'url("' + value + '")'});	
+									ctx = null;
+									break;
+								}
+								case 'field_width':
+								{
+									$('#map').css({'width': value + 'px'});
+									map_width = value;
+									break;
+								}
+								case 'field_height':
+								{
+									$('#map').css({'height': value + 'px'});
+									map_height = value;
+									break;
+								}
+								case 'char_pos_x':
+								{
+									map_lpx = value;
+									drawpos();
+									break;
+								}
+								case 'char_pos_y':
+								{
+									map_lpy = value;
+									drawpos();
+									break;
+								}
 							}
 						});
 					break;

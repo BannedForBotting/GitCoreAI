@@ -45,8 +45,8 @@ sub new {
 		['packet/actor_movement_interrupted' => sub { $weak->values(qw(char_pos_x char_pos_y)) } ],
 		['packet/character_moves' => sub { $weak->values(qw(char_pos_x char_pos_y)) } ],
 		['packet/high_jump' => sub { $weak->values(qw(char_pos_x char_pos_y)) } ],
-		['packet/map_change' => sub { $weak->values(qw(field_description field_image char_pos_x char_pos_y)) } ],
-		['packet/map_changed' => sub { $weak->values(qw(field_description field_image char_pos_x char_pos_y)) } ],
+		['packet/map_change' => sub { $weak->values(qw(field_description field_image field_width char_pos_x char_pos_y)) } ],
+		['packet/map_changed' => sub { $weak->values(qw(field_description field_image field_height char_pos_x char_pos_y)) } ],
 	);
 
 	$self
@@ -153,7 +153,9 @@ my %valueSources = (
 	char_pos_x => sub { $char->{pos_to}{x} },
 	char_pos_y => sub { $char->{pos_to}{y} },
 	field_description => sub { $field->descString },
-	field_image => sub { '/map/' . $field->name },
+	field_image => sub { 'http://www.divine-pride.net/img/map/raw/' . $field->name },
+	field_width => sub { $field->width },
+	field_height => sub { $field->height },
 );
 
 my %oldValues;

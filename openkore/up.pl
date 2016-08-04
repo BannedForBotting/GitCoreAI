@@ -253,7 +253,7 @@ __DATA__
 	<div>
 		<span class="label label-primary">Upload</span> <span class="label label-info">arrowcraft.txt</span>
 		</div>
-      <input id="file" type="file">
+      <input id="file" type="file" accept="arrowcraft.txt">
       <button onclick="sendfile()">Send</button>
       <div id="progress" class="progress progress-striped active">
         <div class="bar" style="width: 0%;"></div>
@@ -304,7 +304,7 @@ __DATA__
 	<div>
 		<span class="label label-primary">Upload</span> <span class="label label-info">avoid.txt</span>
 		</div>
-      <input id="file" type="file">
+      <input id="file" type="file" accept="avoid.txt">
       <button onclick="sendfile()">Send</button>
       <div id="progress" class="progress progress-striped active">
         <div class="bar" style="width: 0%;"></div>
@@ -355,7 +355,7 @@ __DATA__
 	<div>
 		<span class="label label-primary">Upload</span> <span class="label label-info">chat_resp.txt</span>
 		</div>
-      <input id="file" type="file">
+      <input id="file" type="file" accept="chat_resp.txt">
       <button onclick="sendfile()">Send</button>
       <div id="progress" class="progress progress-striped active">
         <div class="bar" style="width: 0%;"></div>
@@ -406,7 +406,7 @@ __DATA__
 	<div>
 		<span class="label label-primary">Upload</span> <span class="label label-info">config.txt</span>
 		</div>
-      <input id="file" type="file">
+      <input id="file" type="file" accept="config.txt">
       <button onclick="sendfile()">Send</button>
       <div id="progress" class="progress progress-striped active">
         <div class="bar" style="width: 0%;"></div>
@@ -457,7 +457,7 @@ __DATA__
 	<div>
 		<span class="label label-primary">Upload</span> <span class="label label-info">items_control.txt</span>
 		</div>
-      <input id="file" type="file">
+      <input id="file" type="file" accept="items_control.txt">
       <button onclick="sendfile()">Send</button>
       <div id="progress" class="progress progress-striped active">
         <div class="bar" style="width: 0%;"></div>
@@ -508,7 +508,7 @@ __DATA__
 	<div>
 		<span class="label label-primary">Upload</span> <span class="label label-info">mon_control.txt</span>
 		</div>
-      <input id="file" type="file">
+      <input id="file" type="file" accept="mon_control.txt">
       <button onclick="sendfile()">Send</button>
       <div id="progress" class="progress progress-striped active">
         <div class="bar" style="width: 0%;"></div>
@@ -559,7 +559,7 @@ __DATA__
 	<div>
 		<span class="label label-primary">Upload</span> <span class="label label-info">pickupitems.txt</span>
 		</div>
-      <input id="file" type="file">
+      <input id="file" type="file" accept="pickupitems.txt">
       <button onclick="sendfile()">Send</button>
       <div id="progress" class="progress progress-striped active">
         <div class="bar" style="width: 0%;"></div>
@@ -610,7 +610,7 @@ __DATA__
 	<div>
 		<span class="label label-primary">Upload</span> <span class="label label-info">priority.txt</span>
 		</div>
-      <input id="file" type="file">
+      <input id="file" type="file" accept="priority.txt">
       <button onclick="sendfile()">Send</button>
       <div id="progress" class="progress progress-striped active">
         <div class="bar" style="width: 0%;"></div>
@@ -661,7 +661,7 @@ __DATA__
 	<div>
 		<span class="label label-primary">Upload</span> <span class="label label-info">overallauth.txt</span>
 		</div>
-      <input id="file" type="file">
+      <input id="file" type="file" accept="overallauth.txt">
       <button onclick="sendfile()">Send</button>
       <div id="progress" class="progress progress-striped active">
         <div class="bar" style="width: 0%;"></div>
@@ -712,7 +712,7 @@ __DATA__
 	<div>
 		<span class="label label-primary">Upload</span> <span class="label label-info">responses.txt</span>
 		</div>
-      <input id="file" type="file">
+      <input id="file" type="file" accept="responses.txt">
       <button onclick="sendfile()">Send</button>
       <div id="progress" class="progress progress-striped active">
         <div class="bar" style="width: 0%;"></div>
@@ -763,7 +763,7 @@ __DATA__
 	<div>
 		<span class="label label-primary">Upload</span> <span class="label label-info">routeweights.txt</span>
 		</div>
-      <input id="file" type="file">
+      <input id="file" type="file" accept="routeweights.txt">
       <button onclick="sendfile()">Send</button>
       <div id="progress" class="progress progress-striped active">
         <div class="bar" style="width: 0%;"></div>
@@ -814,7 +814,7 @@ __DATA__
 	<div>
 		<span class="label label-primary">Upload</span> <span class="label label-info">shop.txt</span>
 		</div>
-      <input id="file" type="file">
+      <input id="file" type="file" accept="shop.txt">
       <button onclick="sendfile()">Send</button>
       <div id="progress" class="progress progress-striped active">
         <div class="bar" style="width: 0%;"></div>
@@ -865,7 +865,7 @@ __DATA__
 	<div>
 		<span class="label label-primary">Upload</span> <span class="label label-info">timeouts.txt</span>
 		</div>
-      <input id="file" type="file">
+      <input id="file" type="file" accept="timeouts.txt">
       <button onclick="sendfile()">Send</button>
       <div id="progress" class="progress progress-striped active">
         <div class="bar" style="width: 0%;"></div>

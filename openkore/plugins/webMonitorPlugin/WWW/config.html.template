@@ -14,10 +14,33 @@
 				}
 			}
 </script>
-
+<script>
+    function load_file(name) {
+        $("#save_status").html('');
+        $("#file_name").val(name);
+        $("#file_data").text('');
+        $.get("control/" + name, function(data){
+            document.getElementById('file_data').value = data;
+        });
+    }
+    $(document).ready(function(){
+        $("#save_btn").click(function(){
+            var fname = $("#file_name").val();
+            if (fname == "") {
+                alert("No file selected.");
+                return;
+            }
+            
+            var fdata = document.getElementById('file_data').value;
+            $.get('control_save/' + fname, {save_data:fdata}, function(data){
+                document.getElementById('save_status').innerHTML = data;
+            });
+        });
+    });
+</script>
         <div class="span9">
           <div class="row-fluid">
-            <div class="span9">
+            <div class="span13">
 			<div class="tabbable">
 				<ul class="nav nav-tabs">
 					<li class="active"><a href="#config" data-toggle="tab">control</a></li>
@@ -25,34 +48,29 @@
 				<div class="tab-content">
 					<div class="tab-pane active" id="config">
 					
-						<div class="span8 well">
-						<div class="pull-right"><span class="label label-important">Change your control script</span></div>
+						<div class="span3 well">
 							<br />
-							<a class="btn" href="http://127.0.0.1:6903/arrowcraft" target="_blank">Upload arrowcraft.txt</a><br />
-							<a class="btn" href="http://127.0.0.1:6903/avoid" target="_blank">Upload avoid.txt</a><br />
-							<a class="btn" href="http://127.0.0.1:6903/chat_resp" target="_blank">Upload chat_resp.txt</a><br />
-							<a class="btn" href="http://127.0.0.1:6903/config" target="_blank">Upload config.txt</a><br />
-							<a class="btn" href="http://127.0.0.1:6903/items_control" target="_blank">Upload items_control.txt</a><br />
-							<a class="btn" href="http://127.0.0.1:6903/mon_control" target="_blank">Upload mon_control.txt</a><br />
-							<a class="btn" href="http://127.0.0.1:6903/pickupitems" target="_blank">Upload pickupitems.txt</a><br />
-							<a class="btn" href="http://127.0.0.1:6903/overallauth" target="_blank">Upload overallauth.txt</a><br />
-							<a class="btn" href="http://127.0.0.1:6903/priority" target="_blank">Upload priority.txt</a><br />
-							<a class="btn" href="http://127.0.0.1:6903/responses" target="_blank">Upload responses.txt</a><br />
-							<a class="btn" href="http://127.0.0.1:6903/routeweights" target="_blank">Upload routeweights.txt</a><br />
-							<a class="btn" href="http://127.0.0.1:6903/shop" target="_blank">Upload shop.txt</a><br />
-							<a class="btn" href="http://127.0.0.1:6903/timeouts" target="_blank">Upload timeouts.txt</a><br />
+							<input type="button" class="btn" value="arrowcraft.txt" onclick="load_file('arrowcraft.txt')" /><br />
+							<input type="button" class="btn" value="avoid.txt" onclick="load_file('avoid.txt')" /><br />
+							<input type="button" class="btn" value="chat_resp.txt" onclick="load_file('chat_resp.txt')" /><br />
+							<input type="button" class="btn" value="config.txt" onclick="load_file('config.txt')" /><br />
+							<input type="button" class="btn" value="items_control.txt" onclick="load_file('items_control.txt')" /><br />
+							<input type="button" class="btn" value="mon_control.txt" onclick="load_file('mon_control.txt')" /><br />
+							<input type="button" class="btn" value="pickupitems.txt" onclick="load_file('pickupitems.txt')" /><br />
+							<input type="button" class="btn" value="priority.txt" onclick="load_file('priority.txt')" /><br />
+							<input type="button" class="btn" value="responses.txt" onclick="load_file('responses.txt')" /><br />
+							<input type="button" class="btn" value="routeweights.txt" onclick="load_file('routeweights.txt')" /><br />
+							<input type="button" class="btn" value="shop.txt" onclick="load_file('shop.txt')" /><br />
+							<input type="button" class="btn" value="timeouts.txt" onclick="load_file('timeouts.txt')" /><br />
+							<input type="button" class="btn" value="sys.txt" onclick="load_file('sys.txt')" /></a><br />
 						</div>
 					
-						<div class="span4 well">
-
-				
+						<div class="span9 well">
+                            <input type="button" class="btn btn-info" value="Save" id="save_btn" />&nbsp;&nbsp;&nbsp;<span id="save_status"></span><br /><br />
+							<input type="hidden"  id="file_name" value="" />
+							<textarea class="form-control span12" rows="25" id="file_data"></textarea>
 						</div>
-						
 					</div>
-					
-				
-					
-	
 				</div>
 			</div>
             </div>

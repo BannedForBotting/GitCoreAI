@@ -259,7 +259,6 @@ sub request {
 	$filename =~ s/new_.../new_zone01/;
 
 	my $csrf_pass = $resources{csrf} eq $csrf;
-
 	if ($filename eq '/authen') {
 		if( $process->{GET}{login} eq $config{adminPassword} and $resources{csrf} eq $csrf  )
 		{
@@ -271,9 +270,98 @@ sub request {
 			$process->header('Location', 'index.html');
 			$process->status(303, "OK");
 			$process->print("\n");
-			return
+			return;
 		}
-	}
+    } elsif ($filename =~ /^\/control\//) {
+        if ($webMonitorPlugin::socketServer->getAuthenCsrf() ne 1) {
+            $process->header('Location', '/index.html');
+			$process->status(404, "Not Found");
+			$process->print("Not Found\n");
+			return;
+        }
+        
+        my $indx = index($filename, '/control/');
+        if ($indx < 0) {
+            $process->header('Location', '/index.html');
+			$process->status(404, "Not Found");
+			$process->print("Not Found\n");
+			return;
+        }
+        
+        $indx += 9;  # size of /control/
+        my $con_name = substr($filename, $indx);
+        if (length($con_name) == 0 || !($con_name =~ /\.txt$/) || $con_name =~ /\/\./) {
+            $process->header('Location', '/index.html');
+			$process->status(404, "Not Found");
+			$process->print("Not Found\n");
+			return;
+        }
+        
+        my $con_file = Settings::getControlFilename($con_name);
+        if (!$con_file || !(-f $con_file)) {
+            $process->header('Location', '/index.html');
+			$process->status(404, "Not Found");
+			$process->print("Not Found\n");
+			return;
+        }
+        
+        my $file_data;
+        open F, "<", $con_file;
+        read F, $file_data, -s F;
+        close F;
+        
+        $process->header('Location', '/index.html');
+        $process->status(200, "OK");
+        $process->print($file_data);
+        return;
+    } elsif ($filename =~ /^\/control_save\//) {
+        if ($webMonitorPlugin::socketServer->getAuthenCsrf() ne 1) {
+            message("authen fail\n");
+            $process->header('Location', '/index.html');
+			$process->status(404, "Not Found");
+			$process->print("Not Found\n");
+			return;
+        }
+        
+        my $indx = index($filename, '/control_save/');
+        if ($indx < 0) {
+            message("path fail\n");
+            $process->header('Location', '/index.html');
+			$process->status(404, "Not Found");
+			$process->print("<font color='red'>Not Found</font>");
+			return;
+        }
+        
+        $indx += 14;  # size of /control_save/
+        my $con_name = substr($filename, $indx);
+        if (length($con_name) == 0 || !($con_name =~ /\.txt$/) || $con_name =~ /\/\./) {
+            message("invalid file ".$con_name."\n");
+            $process->header('Location', '/index.html');
+			$process->status(404, "Not Found");
+			$process->print("<font color='red'>Not Found</font>");
+			return;
+        }
+        
+        my $con_file = Settings::getControlFilename($con_name);
+        if (!$con_file || !(-f $con_file)) {
+            message("file not found\n");
+            $process->header('Location', '/index.html');
+			$process->status(404, "Not Found");
+			$process->print("<font color='red'>Not Found</font>");
+			return;
+        }
+        
+        my $file_data = $process->{GET}{save_data};
+       
+        open F, ">", $con_file;
+        print F $file_data;
+        close F;
+        
+        $process->header('Location', '/index.html');
+        $process->status(200, "OK");
+        $process->print("<font color='green'>Success.</font>");
+        return;
+    }
 	
 # TODO: It is necessary to optimize this function to load the variables what we really needed, and not everything!
 
@@ -859,8 +947,6 @@ sub request {
 	{
 		if ($filename eq '/handler') {
 			$self->checkCSRF($process) or return;
-			
-			$webMonitorPlugin::socketServer->setAuthenCsrfeXT();
 			handle(\%resources, $process);
 			return;
 		}
@@ -897,7 +983,7 @@ sub request {
 		} else {
 			# our custom 404 message
 			$process->header('Content-Type' => 'text/html');
-			$process->status(404 => 'Not Found');
+			$process->status(404, 'Not Found');
 			$content .= "<h1>Not Found</h1>";
 			$process->shortResponse($content);
 		}
@@ -963,7 +1049,7 @@ sub handle {
 		return
 	}
 
-	$process->status(204 => 'No Content');
+	$process->status(204, 'No Content');
 }
 
 sub contentType {

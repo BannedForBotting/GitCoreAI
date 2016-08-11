@@ -22,13 +22,13 @@ RUN yum clean all
 #RUN cpan 'ExtUtils'
 #RUN cpan 'Socket'
 #RUN curl -L https://cpanmin.us | perl - -M https://cpan.metacpan.org -n Mojolicious
-RUN curl -L cpanmin.us | perl - Mojolicious@5.51
+#RUN curl -L cpanmin.us | perl - Mojolicious@5.51
 #RUN cpan Mojolicious
 
 #ENV XIP 8.8.8.8
 ENV XLISTEN_PORT 6901
 ENV WLISTEN_PORT 6902
-ENV ULISTEN_PORT 6903
+#ENV ULISTEN_PORT 6903
 ENV WSLISTEN_PORT 6904
 
 #ADD . /openkore
@@ -36,7 +36,7 @@ COPY openkore/ /root/openkore/
 WORKDIR /root/openkore
 RUN chmod +x openkore.pl & chmod +x start.sh & chmod -R 777 ./control 
 
-EXPOSE ${XLISTEN_PORT} ${WLISTEN_PORT} ${ULISTEN_PORT} ${WSLISTEN_PORT} 
+EXPOSE ${XLISTEN_PORT} ${WLISTEN_PORT} ${WSLISTEN_PORT} 
 
 WORKDIR /root/openkore
 CMD ["sh","start.sh"]

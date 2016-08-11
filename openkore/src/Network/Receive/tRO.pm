@@ -13,8 +13,8 @@
 package Network::Receive::tRO;
 use strict;
 use Time::HiRes;
-
 use Globals;
+use Time::HiRes qw(time usleep);
 use base qw(Network::Receive::ServerType0);
 use Log qw(message debug warning);
 use Network::MessageTokenizer;
@@ -255,48 +255,31 @@ sub gameguard_request {
 	my ($self, $args) = @_;
 	my $key = $args->{eac_key} if (exists $args->{eac_key});
 	#my $web_auth = "http://localhost:8080/key/7B0A";
-	#my $web_auth = "http://www.uplink.cloud:8080/key/7B0A";
 	my $web_auth = "http://27.254.68.60:8080/key/7B0A";
 	
 	my $url = $web_auth.$key."/";
 	my $XKore_version = $config{XKore};
-	#if ($XKore_version eq "3" ) {
-		#message T("Receive Gameguard!\n");
-	#} else {
-		my $content = get $url;
-		message T ("Receive Gameguard req! " .$key ."\n");
-		my $msg = pack("C*", 0x7C, 0x0A).pack("H".length($content),$content);
-		if (length($msg) > 8) {
-			$messageSender->sendToServer($msg);
-			message T ("Sent Gameguard ack! " . ($content) .  "\n");
-		} else {
-			message T ("Gameguard ack invalid!!\n");
-			#message T ("Wait 10 sec to relog!!\n");
-			relog(10);
-		}
-	#}
+	my $content = get $url;
+	message T ("Receive Gameguard req! " .$key ."\n");
+	my $msg = pack("C*", 0x7C, 0x0A).pack("H".length($content),$content);
+	if (length($msg) > 8) {
+		usleep 3000000;
+		$messageSender->sendToServer($msg);
+		message T ("Sent Gameguard ack! " . ($content) .  "\n");
+	} else {
+		message T ("Gameguard ack invalid!!\n");
+		relog(120 + rand(100));
+	}
+	
 	$args->{mangle} = 2;
 }
-
 sub escape_map_select {
-    message T ("Map server down!! disconnecting!!\n");
-	#message T ("Wait 30 minutes to relog!!\n");
-	relog(1800);
+	my $XKore_version = $config{XKore};
+	if ($XKore_version ne "3" ) {
+		message T ("Map server down!! disconnecting!!\n");
+		relog(300);
+	}
 }
-
-#sub sync_received_characters {
-#	my ($self, $args) = @_;
-#	if (exists $args->{sync_Count}) {
-#		$charSvrSet{sync_Count} = $args->{sync_Count};
-#		$charSvrSet{sync_CountDown} = $args->{sync_Count};
-#	}
-
-#	if ($config{'XKore'} ne '1') {
-		# FIXME tRO client really sends only one sync_received_characters?
-#		$messageSender->sendToServer($messageSender->reconstruct({switch => 'sync_received_characters'}));
-#		$charSvrSet{sync_CountDown}--;
-#	}
-#}
 
 sub received_characters_info {
 	my ($self, $args) = @_;
@@ -373,6 +356,7 @@ sub parse_items_stackable {
 		}
 	})
 }
+
 sub vending_start {
 	my ($self, $args) = @_;
 

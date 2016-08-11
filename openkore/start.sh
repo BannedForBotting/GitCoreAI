@@ -76,4 +76,4 @@ then
 	sed -i 's/'"timeouts$RMMD.txt"'/'"timeouts.txt"'/g' plugins/webMonitorPlugin/WWW/config.html.template
 fi
 
-perl up.pl daemon -m production -l http://*:$ULISTEN_PORT & perl openkore.pl
+perl openkore.pl

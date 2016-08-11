@@ -78,14 +78,8 @@ sub setAuthenCsrf {
     $self->{authen_csrf} = $authen_csrf if defined($authen_csrf);
 	if( $self->{authen_csrf} eq 1 )
 	{
-		$timeremain = 120;
+		$timeremain = 300;
 	}
-    return $self->{authen_csrf};
-}
-
-sub setAuthenCsrfeXT {
-    my ( $self ) = @_;
-    $timeremain += 60;
     return $self->{authen_csrf};
 }
 

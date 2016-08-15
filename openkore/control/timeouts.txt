@@ -10,7 +10,7 @@ charlogin 12
 maplogin 12
 play 40
 # When disconnected, wait x seconds before reconnecting again
-reconnect 30
+reconnect 18
 
 # Wait x seconds for a poseidon reply before disconnecting
 # Ignore this if you don't use Poseidon Server
@@ -23,14 +23,14 @@ ai_move_retry 0.25
 ai_move_giveup 1.5
 
 # Send the attack packet every x seconds, if it hasn't been send already
-ai_attack 1
-ai_homunculus_attack 1
+ai_attack 0.2
+ai_homunculus_attack 0.2
 
 # Check for monsters to attack every x seconds
-ai_attack_auto 0.5
+ai_attack_auto 0.2
 
 # Give up attacking a monster if it can't be reached within x seconds
-ai_attack_giveup 12
+ai_attack_giveup 5
 
 # If you've just killed a monster, and there are no aggressives,
 # and you're not picking up any items, wait x seconds before doing
@@ -42,13 +42,13 @@ ai_attack_unfail 5
 # Pause for the specified number of seconds after taking something,
 # it increases the interval between taking several items and between
 # taking the last item and continuing the actions.
-ai_items_take_delay 1.0
+ai_items_take_delay 0.8
 
 # When your monster died, start checking for loot after x seconds
-ai_items_take_start 0.6
+ai_items_take_start 0.5
 
 # Stop checking for loot x seconds after it has begun checking
-ai_items_take_end 1.2
+ai_items_take_end 1
 
 # When standing near an item, send the 'take' packet every x seconds until
 # the item has been taken.
@@ -59,10 +59,10 @@ ai_take_giveup 3
 ai_items_gather_giveup 3
 
 # Every x seconds, check items for gathering
-ai_items_gather_auto .3
+ai_items_gather_auto 0.3
 
 # Only gather items that have been more than x seconds on screen
-ai_items_gather_start .3
+ai_items_gather_start 0.3
 
 ai_follow_lost_end 10
 ai_getInfo 1

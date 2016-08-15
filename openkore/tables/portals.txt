@@ -2743,8 +2743,8 @@ airplane 254 54 airplane 91 67
 airplane 87 67 airplane 250 54
 yuno 96 261 airplane 244 58
 yuno 6 261 airplane_01 244 58
-izlude 149 39 izlude 182 56
-izlude 176 56 izlude 145 40
+#izlude 149 39 izlude 182 56
+#izlude 176 56 izlude 145 40
 moscovia 205 98 mosk_in 214 255
 moscovia 203 171 mosk_in 86 180
 mosk_in 222 128 mosk_in 288 118
@@ -2814,7 +2814,7 @@ lhz_airport 143 43 lhz_airport 148 51 1200 c r0 c r0
 lhz_airport 143 49 lhz_airport 142 40 0 c r0 c r0
 
 # Izlude airship
-izlude 206 55 airplane_01 244 58 1200 c r0 c r0
+#izlude 206 55 airplane_01 244 58 1200 c r0 c r0
 
 # Rachel airship
 #(portal with dialog) ra_fild12 295 208 airplane_01 245 60 1200 c r0
@@ -3139,4 +3139,83 @@ casp_in01 191 205 casp_in01 262 203
 casp_in01 231 203 casp_in01 159 205
 casp_in01 262 203 casp_in01 191 201
 casp_auct02 40 36 caspen 151 198
-casp_dun01 23 38 caspen 267 277
+casp_dun01 23 38 caspen 267 277prt_maze01 22 85 prt_maze01 85 13
+prt_maze01 85 13 prt_maze01 22 88
+prt_maze01 52 45 prt_maze01 5 140
+prt_maze01 5 140 prt_maze01 58 48
+prt_maze01 139 45 prt_maze01 52 45
+prt_maze01 182 85 prt_maze01 137 74
+prt_maze01 137 74 prt_maze01 182 88
+prt_maze01 194 139 prt_maze01 168 94
+prt_maze01 168 94 prt_maze01 191 139
+prt_maze01 175 165 prt_maze01 22 85
+prt_maze01 45 104 prt_maze01 175 165
+prt_maze01 74 12 prt_maze01 74 97
+prt_maze01 74 97 prt_maze01 71 11
+prt_maze01 125 171 prt_maze01 54 5
+prt_maze01 54 5 prt_maze01 128 173
+prt_maze01 194 175 prt_maze01 154 181
+prt_maze01 154 181 prt_maze01 191 175
+prt_maze01 137 125 prt_maze01 22 85
+prt_maze01 166 139 prt_maze01 128 173
+prt_maze01 63 125 prt_maze01 45 104
+prt_maze01 54 154 prt_maze01 191 175
+prt_maze01 114 56 prt_maze01 63 114
+prt_maze01 63 114 prt_maze01 111 56
+prt_maze01 176 5 prt_maze01 114 56
+prt_maze01 194 15 prt_maze01 52 48
+prt_maze01 58 194 prt_maze01 74 74
+prt_maze01 74 74 prt_maze01 58 191
+prt_maze01 23 125 prt_maze01 58 194
+prt_maze01 142 114 prt_maze01 45 21
+prt_maze01 45 21 prt_maze01 142 111
+prt_maze01 14 45 prt_maze01 125 105
+prt_maze01 125 105 prt_maze01 14 48
+prt_maze01 5 58 prt_maze01 48 104
+prt_maze01 177 74 prt_maze01 18 154
+prt_maze01 18 154 prt_maze01 177 71
+prt_maze01 22 85 prt_maze01 194 139
+prt_maze01 154 134 prt_maze01 58 191
+prt_maze01 99 34 prt_maze01 194 54
+prt_maze01 194 54 prt_maze01 99 31
+prt_maze01 5 186 prt_maze01 17 114
+prt_maze01 17 114 prt_maze01 8 186
+prt_maze01 16 34 prt_maze01 22 194
+prt_maze01 22 194 prt_maze01 16 31
+prt_maze01 23 5 prt_maze01 176 8
+prt_maze01 176 34 prt_maze01 8 186
+prt_maze01 105 114 prt_maze01 85 56
+prt_maze01 85 56 prt_maze01 105 111
+prt_maze01 85 97 prt_maze01 63 128
+prt_maze01 194 94 prt_maze01 58 191
+prt_maze01 154 22 prt_maze01 23 125
+prt_maze01 114 145 prt_maze01 105 114
+prt_maze01 98 154 prt_maze01 102 168
+prt_maze02 93 16 prt_maze01 85 174
+prt_maze01 85 174 prt_maze02 93 20
+prt_maze03 182 85 prt_maze02 100 182
+prt_maze02 100 182 prt_maze03 182 88
+prt_maze03 85 97 prt_maze03 63 125
+prt_maze03 63 125 prt_maze03 88 97
+prt_maze03 176 5 prt_maze03 114 95
+prt_maze03 114 95 prt_maze03 176 8
+prt_maze03 137 125 prt_maze03 137 74
+prt_maze03 137 74 prt_maze03 145 125
+prt_maze03 154 22 prt_maze03 137 128
+prt_maze03 139 45 prt_maze03 137 125
+prt_maze03 45 21 prt_maze03 18 154
+prt_maze03 18 154 prt_maze03 48 21
+pay_dun04 32 204 pay_dun03 127 62
+sword_1-1 223 243 sword_1-1 192 244
+sword_1-1 192 244 sword_1-1 215 244
+sword_1-1 8 207 sword_1-1 223 243
+sword_1-1 223 205 sword_1-1 193 207
+sword_1-1 193 207 sword_1-1 215 205
+sword_1-1 8 169 sword_1-1 223 205
+alberta_in 73 141 alberta 45 145
+alberta 45 145 alberta_in 69 141
+alberta_in 66 170 alberta_in 66 153
+alberta_in 66 153 alberta_in 66 174
+geffen 119 55 geffen 119 55
+geffen 119 55 geffen 119 55
+in_moc_16 182 169 in_moc_16 182 169

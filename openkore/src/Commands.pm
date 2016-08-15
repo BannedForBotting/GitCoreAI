@@ -93,6 +93,7 @@ sub initHandlers {
 	dl					=> \&cmdDealList,
 	doridori			=> \&cmdDoriDori,
 	drop				=> \&cmdDrop,
+	disconnect			=> \&cmdDisconnect,
 	e					=> \&cmdEmotion,
 	eq					=> \&cmdEquip,
 	exp					=> \&cmdExp,
@@ -1658,6 +1659,18 @@ sub cmdDrop {
 			error T("No items were dropped.\n");
 		}
 	}
+}
+
+sub cmdDisconnect {
+	if (!$net) {
+		error TF("No net connect '%s'\n", shift);
+		return;
+	}
+	my (undef, $args) = @_;
+	
+	message TF("Disconnecting\n");
+	$net->serverDisconnect;
+	$net->setState(Network::NOT_CONNECTED);			
 }
 
 sub cmdDump {

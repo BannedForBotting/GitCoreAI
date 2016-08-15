@@ -72,9 +72,9 @@ attackAuto_onlyWhenSafe 0
 attackAuto_followTarget 1
 attackAuto_inLockOnly 1
 attackAuto_notInTown 1
-attackDistance 1.5
+attackDistance 1.0
 attackDistanceAuto 1
-attackMaxDistance 2.5
+attackMaxDistance 1.5
 attackMaxRouteDistance 100
 attackMaxRouteTime 4
 attackMinPlayerDistance 2
@@ -85,7 +85,7 @@ attackCanSnipe 0
 attackCheckLOS 0
 attackLooters 1
 attackChangeTarget 1
-aggressiveAntiKS 0
+aggressiveAntiKS 1
 
 autoMoveOnDeath 0
 autoMoveOnDeath_x
@@ -183,7 +183,7 @@ followRandomDistance 4
 
 itemsTakeAuto 2
 itemsTakeAuto_party 0
-itemsGatherAuto 2
+itemsGatherAuto 0
 itemsMaxWeight 89
 itemsMaxWeight_sellOrStore 89
 itemsMaxNum_sellOrStore 99

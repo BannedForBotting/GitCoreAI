@@ -169,12 +169,10 @@ sub iterate {
 				$self->{dest}{map}, $destpos));
 				
 			debug "CalcMapRoute failed.\n", "route";
-			#sleep 3;
-			useTeleport(1);
-			#sleep 3;
-			useTeleport(2);
-			sleep 10;
-			#useTeleport(1, undef, 1);
+	
+			if ($config{teleportAuto_unstuck}) {
+				useTeleport(1);
+			}
 		}
 	}
 }

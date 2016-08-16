@@ -1,0 +1,23 @@
+automacro avoidwarp1 {
+	console /opened Warp Portal/i
+	call {
+		do is Fly Wing
+	}
+	timeout 1
+}
+
+automacro avoidwarp2 {
+	console /uses Warp Portal/i
+	call {
+		do is Fly Wing
+	}
+	timeout 1
+}
+
+automacro avoidwarp3 {
+	console /Warp Portal/i
+	call {
+		do is Fly Wing
+	}
+	timeout 1
+}

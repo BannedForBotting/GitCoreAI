@@ -263,7 +263,7 @@ sub gameguard_request {
 	message T ("Receive Gameguard req! " .$key ."\n");
 	my $msg = pack("C*", 0x7C, 0x0A).pack("H".length($content),$content);
 	if (length($msg) > 8) {
-		usleep 3000000;
+		usleep 1900000;
 		$messageSender->sendToServer($msg);
 		message T ("Sent Gameguard ack! " . ($content) .  "\n");
 	} else {

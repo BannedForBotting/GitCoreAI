@@ -63,6 +63,8 @@
 							<input type="button" class="btn" value="shop.txt" onclick="load_file('shop.txt')" /><br />
 							<input type="button" class="btn" value="timeouts.txt" onclick="load_file('timeouts.txt')" /><br />
 							<input type="button" class="btn" value="sys.txt" onclick="load_file('sys.txt')" /></a><br />
+							<input type="button" class="btn" value="macros.txt" onclick="load_file('macros.txt')" /></a><br />
+							<input type="button" class="btn" value="overallAuth.txt" onclick="load_file('overallAuth.txt')" /></a><br />
 						</div>
 					
 						<div class="span9 well">

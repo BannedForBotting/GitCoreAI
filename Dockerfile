@@ -32,10 +32,15 @@ RUN yum clean all
 #ENV WSLISTEN_PORT 6904
 
 ENV XKore_listenPort 6901
-ENV XKore_listenPort_char $(XKore_listenPort + 1)
-ENV XKore_listenPort_map $(XKore_listenPort_char + 1)
-ENV webPort $(XKore_listenPort_map + 1)
-ENV webSocketPort $(webPort + 1)
+#ENV XKore_listenPort_char $(XKore_listenPort + 1)
+#ENV XKore_listenPort_map $(XKore_listenPort_char + 1)
+#ENV webPort $(XKore_listenPort_map + 1)
+#ENV webSocketPort $(webPort + 1)
+
+ENV XKore_listenPort_char 6902
+ENV XKore_listenPort_map 6903
+ENV webPort 6904
+ENV webSocketPort 6905
 
 #ADD . /openkore
 COPY openkore/ /root/openkore/

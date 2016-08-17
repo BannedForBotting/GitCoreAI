@@ -37,7 +37,7 @@
 							</tr>
 						</thead>
 						<tbody>
-						{startLoop}<tr><td><img src="http://db.irowiki.org/image/item/{storageUsableID}.png"/></td><td>{storageUnusableAmount}</td><td class="left">{storageUnusable}</td>{storageUnusableGetButton}</tr>{endLoop}
+						{startLoop}<tr><td><img src="http://db.irowiki.org/image/item/{storageUnusableID}.png"/></td><td>{storageUnusableAmount}</td><td class="left">{storageUnusable}</td>{storageUnusableGetButton}</tr>{endLoop}
 						</tbody>
 						</table>
 					</div>
@@ -52,7 +52,7 @@
 							</tr>
 						</thead>
 						<tbody>
-						{startLoop}<tr><td><img src="http://db.irowiki.org/image/item/{storageUsableID}.png"/></td><td>{storageEquipmentAmount}</td><td class="left">{storageEquipment}</td>{storageEquipmentGetButton}</tr>{endLoop}
+						{startLoop}<tr><td><img src="http://db.irowiki.org/image/item/{storageEquipmentID}.png"/></td><td>{storageEquipmentAmount}</td><td class="left">{storageEquipment}</td>{storageEquipmentGetButton}</tr>{endLoop}
 						</tbody>
 						</table>
 					</div>

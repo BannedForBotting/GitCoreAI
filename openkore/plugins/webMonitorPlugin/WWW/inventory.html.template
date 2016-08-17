@@ -40,7 +40,7 @@
 							</tr>
 						</thead>
 						<tbody>
-						{startLoop}<tr><td><img src="http://db.irowiki.org/image/item/{usableID}.png"/></td><td>{inventoryUnusableAmount}</td><td class="left">{inventoryUnusable}</td><td></td>{inventoryUnusableJS}</tr>{endLoop}
+						{startLoop}<tr><td><img src="http://db.irowiki.org/image/item/{unusableID}.png"/></td><td>{inventoryUnusableAmount}</td><td class="left">{inventoryUnusable}</td><td></td>{inventoryUnusableJS}</tr>{endLoop}
 						</tbody>
 						</table>
 					</div>
@@ -56,7 +56,7 @@
 							</tr>
 						</thead>
 						<tbody>
-						{startLoop}<tr><td><img src="http://db.irowiki.org/image/item/{usableID}.png"/></td><td>1</td><td class="left">{inventoryEquipped}</td><td></td>{inventoryEquippedJS}</tr>{endLoop}
+						{startLoop}<tr><td><img src="http://db.irowiki.org/image/item/{equipmentID}.png"/></td><td>1</td><td class="left">{inventoryEquipped}</td><td></td>{inventoryEquippedJS}</tr>{endLoop}
 						</tbody>
 						</table>
 					</div>
@@ -72,7 +72,7 @@
 							</tr>
 						</thead>
 						<tbody>
-						{startLoop}<tr><td><img src="http://db.irowiki.org/image/item/{usableID}.png"/></td><td>1</td><td class="left">{inventoryUnequipped}</td>{inventoryUnequippedJS}</tr>{endLoop}
+						{startLoop}<tr><td><img src="http://db.irowiki.org/image/item/{uequipmentID}.png"/></td><td>1</td><td class="left">{inventoryUnequipped}</td>{inventoryUnequippedJS}</tr>{endLoop}
 						</tbody>
 						</table>
 					</div>
@@ -87,7 +87,7 @@
 							</tr>
 						</thead>
 						<tbody>
-						{startLoop}<tr><td><img src="http://db.irowiki.org/image/item/{usableID}.png"/></td><td>{cartItemAmount}</td><td class="left">{cartItemName}</td>{cartItemJS}</tr>{endLoop}
+						{startLoop}<tr><td><img src="http://db.irowiki.org/image/item/{cartItemID}.png"/></td><td>{cartItemAmount}</td><td class="left">{cartItemName}</td>{cartItemJS}</tr>{endLoop}
 						</tbody>
 						</table>
 					</div>	

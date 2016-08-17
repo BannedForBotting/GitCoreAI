@@ -319,7 +319,7 @@ sub loadDataFiles {
 sub initNetworking {
 	our $XKore_dontRedirect = 0;
 	my $XKore_version = 3;
-	configModify("XKore", 3);
+	#configModify("XKore", 3);
 	eval {
 		$clientPacketHandler = Network::ClientReceive->new;
 		

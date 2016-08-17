@@ -214,6 +214,11 @@ sub print {
 	undef $@;
 }
 
+sub socket {
+	my ($self) = @_;
+	return $self->{socket};
+}
+
 ##
 # String $BaseWebServerProcess->file()
 # Ensures: defined(result)

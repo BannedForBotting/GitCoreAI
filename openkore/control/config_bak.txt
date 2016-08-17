@@ -1,18 +1,45 @@
 # Please Read the Users Manual
 # The Manual is located at http://wiki.openkore.com/index.php?title=Manual
 
+webBind 0.0.0.0
+webPort 6902
+webSPort 6904
+webMapURL /maps/%s.png
+webDBLink_monster	http://ratemyserver.net/index.php?page=mob_db&mob_id=%s
+webDBLink_item	http://ratemyserver.net/index.php?page=item_db&item_id=%s
+
 ######## Login options and server-specific options ########
 
 master Thai
-server 0
+server 3
 username
 password
 loginPinCode
 char 0
 
+# Poseidon Settings (http://wiki.openkore.com/index.php/PoseidonServer)
+# They must be the same as Query Server config in Poseidon.txt
+poseidonServer 127.0.0.1
+poseidonPort 24390
+
+bindIp
+forceMapIP
+
 # 1 = hook into RO client, 2 = Act as stand-alone proxy, proxy = act as true proxy
 # http://wiki.openkore.com/index.php/XKore
 XKore 3
+XKore_port 2350
+XKore_dll NetRedirect.dll
+XKore_autoAttachIfOneExe 1
+XKore_silent 1
+XKore_bypassBotDetection 0
+XKore_exeName ragexe.exe
+
+# XKore 2 / Proxy configuration
+XKore_listenIp 0.0.0.0
+XKore_listenPort 6901
+XKore_publicIp 0.0.0.0
+XKore_ID
 
 # It is not advised to set secureAdminPassword if you're using 
 secureAdminPassword 0
@@ -21,6 +48,11 @@ callSign
 commandPrefix ;
 callSignGM 0
 inGameAuth 0
+
+pauseCharServer 0
+pauseMapServer 0
+ignoreInvalidLogin 0
+secureLogin_requestCode
 
 # Opening cash shop when connected to map server (recv/ST0)
 whenInGame_requestCashPoints 0
@@ -50,7 +82,7 @@ attackMinPortalDistance 4
 attackUseWeapon 1
 attackNoGiveup 0
 attackCanSnipe 0
-attackCheckLOS 1
+attackCheckLOS 0
 attackLooters 1
 attackChangeTarget 1
 aggressiveAntiKS 1
@@ -59,9 +91,6 @@ autoMoveOnDeath 0
 autoMoveOnDeath_x
 autoMoveOnDeath_y
 autoMoveOnDeath_map
-
-#attackEquip_topHead Snake Head Hat [ศรีนวล] [1]
-#attackEquip_topHead Snake Head Hat
 
 attackEquip_topHead
 attackEquip_midHead
@@ -105,16 +134,16 @@ autoResponseOnHeal 0
 autoSpell
 autoSpell_safe
 
-avoidGM_namePattern 
-avoidGM_near 1
-avoidGM_near_inTown 1
-avoidGM_talk 1
-avoidGM_reconnect 7200
+avoidGM_namePattern
+avoidGM_near 0
+avoidGM_near_inTown 0
+avoidGM_talk 0
+avoidGM_reconnect 1800
 avoidGM_ignoreList
 
 avoidList 1
 avoidList_inLockOnly 0
-avoidList_reconnect 3600
+avoidList_reconnect 1800
 
 cachePlayerNames 1
 cachePlayerNames_duration 900
@@ -284,10 +313,10 @@ manualURL http://wiki.openkore.com/index.php?title=Manual
 forumURL http://forums.openkore.com
 
 logChat 0
-logPrivateChat 0
-logPartyChat 0
-logGuildChat 0
-logSystemChat 0
+logPrivateChat 1
+logPartyChat 1
+logGuildChat 1
+logSystemChat 1
 logEmoticons
 logConsole 0
 logAppendUsername 0
@@ -409,19 +438,6 @@ pet_return 20
 # You can copy & paste any block multiple times. So if you want to
 # configure two attack skills, just duplicate the attackSkillSlot block.
 
-attackSkillSlot Bowling Bash {
-	lvl 10
-	dist 1.5
-	sp > 20
-	onAction Attack
-	aggressives > 2
-	notMonsters Hydra
-	inLockOnly 1
-	timeout 0
-	disabled 1
-	maxUses 5
-}
-
 attackSkillSlot {
 	lvl 10
 	dist 1.5
@@ -482,12 +498,6 @@ attackComboSlot {
 	monstersCount
 }
 
-doCommand talknpc 96 30 c c r0 c n {
-	hp < 5%
-	inMap new_3-3
-	disabled 1
-}
-
 doCommand {
 	hp
 	sp
@@ -514,17 +524,6 @@ doCommand {
 	inCart
 	inMap
 	manualAI 0
-}
-
-useSelf_skill Two-Hand Quicken {
-	lvl 10
-	sp >50
-	onAction Attack
-	whenStatusInactive Two-Hand Quicken
-	inLockOnly 1
-	notWhileSitting 1
-	notInTown 1
-	disabled 1
 }
 
 useSelf_skill {
@@ -627,12 +626,6 @@ autoSwitch {
 }
 
 equipAuto {
-	topHead Pecopeco Hariband
-	onAction mapRoute, Route
-	disabled 1
-}
-
-equipAuto {
 	topHead
 	midHead
 	lowHead
@@ -670,56 +663,6 @@ equipAuto {
 	inInventory
 	manualAI 0
 }
-useSelf_item Green Herb {
-	whenStatusActive Poisoned
-	inLockOnly 1
-	notWhileSitting 1
-	inInventory Green Herb
-	disabled 0
-}
-
-useSelf_item Blue Herb, Grape {
-	sp < 50%
-	inLockOnly 1
-	notWhileSitting 1
-	inInventory Blue Herb, Grape
-	disabled 0
-}
-
-useSelf_item Monster's Feed {
-	hp < 75%
-	notWhileSitting 1
-	disabled 0
-	inInventory Monster's Feed
-}
-
-useSelf_item Red Herb, Apple, Potato, Carrot, Meat, Milk, Banana {
-	hp < 70%
-	notWhileSitting 1
-	inInventory Red Herb, Apple, Potato, Carrot, Meat, Milk, Banana
-	disabled 0
-}
-
-useSelf_item Novice Potion {
-	hp < 60%
-	notWhileSitting 1
-	inInventory Novice Potion
-	disabled 0
-}
-
-useSelf_item Red Potion {
-	hp < 50%
-	notWhileSitting 1
-	inInventory Red Potion
-	disabled 0
-}
-
-useSelf_item White Herb {
-	hp < 60%
-	notWhileSitting 1
-	inInventory White Herb
-	disabled 0
-}
 
 useSelf_item {
 	hp
@@ -749,56 +692,6 @@ useSelf_item {
 
 ######## Autostorage/autosell ########
 
-buyAuto Awakening Potion {
-	npc izlude_in 115 61
-	standpoint
-	distance 8
-	price
-	minAmount 0
-	maxAmount 5
-	disabled 1
-}
-
-buyAuto Red Potion {
-	npc izlude_in 115 61
-	standpoint
-	distance 8
-	price
-	minAmount 1
-	maxAmount 200
-	disabled 1
-}
-
-buyAuto Butterfly Wing {
-	npc izlude_in 115 61
-	standpoint
-	distance 8
-	price
-	minAmount 1
-	maxAmount 5
-	disabled 1
-}
-
-buyAuto Fly Wing {
-	npc izlude_in 115 61
-	standpoint
-	distance 8
-	price
-	minAmount 1
-	maxAmount 20
-	disabled 0
-}
-
-buyAuto Potato {
-	npc new_4-3 100 50
-	standpoint
-	distance 8
-	price
-	minAmount 1
-	maxAmount 50
-	disabled 1
-}
-
 buyAuto {
 	npc
 	standpoint
@@ -812,12 +705,12 @@ buyAuto {
 sellAuto 0
 sellAuto_npc
 sellAuto_standpoint
-sellAuto_distance 8
+sellAuto_distance 5
 sellAuto_npc_steps s e
 
 storageAuto 0
 storageAuto_npc
-storageAuto_distance 8
+storageAuto_distance 5
 storageAuto_npc_type 1
 storageAuto_npc_steps
 storageAuto_password
@@ -836,22 +729,6 @@ getAuto {
 	passive
 }
 
-avoidSkill 1
-avoidSkill_domain info
-
-avoidSkill {
-	radius 5
-	step 5
-	source
-	method 0
-	skill
-	isSelfSkill
-	lvl
-	maxCastTime
-	minCastTime
-	domain
-}
-
 avoidSkill Warp Portal {
    source Player
    radius 0
@@ -859,7 +736,20 @@ avoidSkill Warp Portal {
    step 10
 }
 
-webBind 0.0.0.0
-webMapURL /maps/%s.png
-webDBLink_monster	http://ratemyserver.net/index.php?page=mob_db&mob_id=%s
-webDBLink_item	http://ratemyserver.net/index.php?page=item_db&item_id=%s
+######## Debugging options; only useful for developers ########
+
+debug 0
+debugPacket_unparsed 0
+debugPacket_received 0
+debugPacket_ro_sent 0
+debugPacket_sent 0
+debugPacket_exclude
+debugPacket_include
+debugPacket_include_dumpMethod
+debugDomains
+logToFile_Debug
+logToFile_Errors
+logToFile_Messages
+logToFile_Warnings
+history_max 50
+macro_orphans terminate

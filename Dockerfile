@@ -26,17 +26,23 @@ RUN yum clean all
 #RUN cpan Mojolicious
 
 #ENV XIP 8.8.8.8
-ENV XLISTEN_PORT 6901
-ENV WLISTEN_PORT 6902
+#ENV XLISTEN_PORT 6901
+#ENV WLISTEN_PORT 6902
 #ENV ULISTEN_PORT 6903
-ENV WSLISTEN_PORT 6904
+#ENV WSLISTEN_PORT 6904
+
+ENV XKore_listenPort 6901
+ENV XKore_listenPort_char $(XKore_listenPort + 1)
+ENV XKore_listenPort_map $(XKore_listenPort_char + 1)
+ENV webPort $(XKore_listenPort_map + 1)
+ENV webSocketPort $(webPort + 1)
 
 #ADD . /openkore
 COPY openkore/ /root/openkore/
 WORKDIR /root/openkore
 RUN chmod +x openkore.pl & chmod +x start.sh & chmod -R 777 ./control 
 
-EXPOSE ${XLISTEN_PORT} ${WLISTEN_PORT} ${WSLISTEN_PORT} 
+EXPOSE ${XKore_listenPort} ${XKore_listenPort_char} ${XKore_listenPort_map} ${webPort} ${webSocketPort} 
 
 WORKDIR /root/openkore
 CMD ["sh","start.sh"]

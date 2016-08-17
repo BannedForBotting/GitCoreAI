@@ -23,7 +23,7 @@ use Time::HiRes qw(time);
 use Protocol::WebSocket;
 use Base::Server;
 use base qw(Base::Server);
-
+use JSON;
 
 ##
 # Base::WebSocketServer Base::WebSocketServer->new([int port, String bind])
@@ -66,10 +66,11 @@ sub message {}
 #
 # Send a message to all clients.
 sub broadcast {
-	my ($self, $message) = @_;
+	my ($self, $message, $adminIP) = @_;
 
 	for my $client (@{$self->{BS_clients}->getItems}) {
 		next unless $client->{websocket_hs} && $client->{websocket_hs}->is_done;
+		next unless $client->{BSC_sock}->peerhost() eq $adminIP;
 
 		$client->send($client->{websocket_frame}->new($message)->to_bytes);
 	}

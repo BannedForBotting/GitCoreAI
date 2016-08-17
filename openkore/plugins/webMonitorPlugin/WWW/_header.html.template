@@ -2,7 +2,8 @@
 <html lang="en">
 
 <head>
-	<meta charset="utf-8">
+	<!--meta charset="utf-8"-->
+	<meta charset="windows-874">
 	<title>{characterName} - {characterLevel}/{characterJobLevel} - Proxy</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="icon" type="image/png" href="img/favicon.png" />
@@ -46,7 +47,6 @@
 			<li class="active"><a>{characterName}</a></li>
 			<li><a>Base Level: <span class="value_char_lv">{characterLevel}</span></a></li>
 			<li><a>Job Level: <span class="value_char_lv_job">{characterJobLevel}</span></a></li>
-			<li><a>Time Session: <span class="value_time_session">0</span></a></li>
 			<li><a><input id="input_login" style="margin:auto;" type="password"><input type="button" style="margin:auto;width:70px;" class="btn span2" id="button_login" value="Login" onClick="send_login()"/></a></li>
 		</ul>
 

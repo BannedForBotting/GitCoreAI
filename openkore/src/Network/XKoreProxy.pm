@@ -61,7 +61,7 @@ sub new {
 	#my $ip = $config{XKore_listenIp} || '0.0.0.0';
 	#my $port = $config{XKore_listenPort} || 6901;
 	my $ip = '0.0.0.0' || '0.0.0.0';
-	my $port = $ENV{'XLISTEN_PORT'} || 6901;
+	my $port = $ENV{'XKore_listenPort'} || 6901;
 	my $self = bless {}, $class;
 
 	# Reuse code from Network::DirectConnection to connect to the server
@@ -307,7 +307,7 @@ sub checkProxy {
 		
 		# (Re)start listening...
 		my $ip = '0.0.0.0';
-		my $port = $ENV{'XLISTEN_PORT'} || 6901;
+		my $port = $ENV{'XKore_listenPort'} || 6901;
 		$self->{proxy_listen} = new IO::Socket::INET(
 			LocalAddr	=> $ip,
 			LocalPort	=> $port,

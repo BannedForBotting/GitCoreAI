@@ -98,6 +98,8 @@ my $hookShopList = Plugins::addHook('packet_vender_store', \&hookShopList);
 # CSRF prevention token
 my $csrf = int rand 2**32;
 
+my $adminIP = "";
+
 sub new {
 	my $class = shift;
 
@@ -164,7 +166,7 @@ sub consoleLogHTML {
 		my $class = messageClass($_->{type}, $_->{domain});
 		$class = ' class="' . $class . '"' if $class;
 
-		push @parts, '<span' . $class . '>' . encode_entities($_->{message}) . '</span>';
+		#push @parts, '<span' . $class . '>' . encode_entities($_->{message}) . '</span>';
 	}
 
 	push @parts, '<noscript><span class="msg_web">Reload to get new messages.</span></noscript>';
@@ -252,6 +254,8 @@ sub request {
 	
 	# TODO: sanitize $filename for possible exploits (like ../../config.txt)
 	my $filename = $process->file;
+	
+	my $peer_address = $process->socket->peerhost();
 
 	# map / to /index.html
 	$filename .= 'index.html' if ($filename =~ /\/$/);
@@ -262,18 +266,21 @@ sub request {
 	if ($filename eq '/authen') {
 		if( $process->{GET}{login} eq $config{adminPassword} and $resources{csrf} eq $csrf  )
 		{
-			$webMonitorPlugin::socketServer->setAuthenCsrf(1);
+			$webMonitorPlugin::socketServer->setAdminIP($peer_address);
+			
+			#set admin ip
+			$adminIP = $peer_address;
 			
 			$filename .= 'index.html' if ($filename =~ /\/$/);
 
 			# hooray for standards-compliance
-			$process->header('Location', 'index.html');
+			$process->header('Location', 'index.html?client=' . $peer_address);
 			$process->status(303, "OK");
 			$process->print("\n");
 			return;
 		}
     } elsif ($filename =~ /^\/control\//) {
-        if ($webMonitorPlugin::socketServer->getAuthenCsrf() ne 1) {
+        if ($peer_address ne $adminIP) {
             $process->header('Location', '/index.html');
 			$process->status(404, "Not Found");
 			$process->print("Not Found\n");
@@ -315,7 +322,7 @@ sub request {
         $process->print($file_data);
         return;
     } elsif ($filename =~ /^\/control_save\//) {
-        if ($webMonitorPlugin::socketServer->getAuthenCsrf() ne 1) {
+        if ($peer_address ne $adminIP) {
             message("authen fail\n");
             $process->header('Location', '/index.html');
 			$process->status(404, "Not Found");
@@ -365,7 +372,7 @@ sub request {
 	
 # TODO: It is necessary to optimize this function to load the variables what we really needed, and not everything!
 
-	if ($field && $net->getState() == Network::IN_GAME && $webMonitorPlugin::socketServer->getAuthenCsrf() eq 1) {
+	if ($field && $net->getState() == Network::IN_GAME && $peer_address eq $adminIP) {
 # Collect data for the tab Report
 		# Experience
 		my ($endTime_EXP, $w_sec, $bExpPerHour, $jExpPerHour, $EstB_sec, $zenyMade, $zenyPerHour, $EstJ_sec);
@@ -943,7 +950,7 @@ sub request {
 		_sidebar.html
 	);
 	
-	if( $webMonitorPlugin::socketServer->getAuthenCsrf() eq 1 )
+	if( $peer_address eq $adminIP )
 	{
 		if ($filename eq '/handler') {
 			$self->checkCSRF($process) or return;

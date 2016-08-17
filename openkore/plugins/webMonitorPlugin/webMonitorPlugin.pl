@@ -83,8 +83,8 @@ sub Unload {
 
 ##### Seting webServer after of plugins loads
 sub post_loading {
-	$port = $ENV{'WLISTEN_PORT'} || 6902;
-	$wsport = $ENV{'WSLISTEN_PORT'} || 6904; 
+	$port = $ENV{'webPort'} || 6902;
+	$wsport = $ENV{'webSocketPort'} || 6904; 
 	$bind = '0.0.0.0';
 
 	eval {

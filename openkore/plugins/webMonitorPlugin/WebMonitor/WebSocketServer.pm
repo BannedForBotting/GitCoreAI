@@ -17,11 +17,10 @@ package WebMonitor::WebSocketServer;
 use strict;
 use base qw(Base::WebSocketServer);
 use JSON;
-use Utils qw/timeOut/;
+#use Utils qw/timeOut/;
 use Globals qw($char $field);
 
-our $timeout;
-our $timeremain;
+#our $timeout;
 
 sub new {
 	my $class = shift;
@@ -33,11 +32,10 @@ sub new {
 	my $data = [$weak];
 	$self->{logHook} = Log::addHook(\&console, $data);
 	
-	$self->{authen_csrf} = 0;
-	$self->{end_time} = 0;
+	$self->{adminIP} = "";
 
 	$self->{hooks} = Plugins::addHooks(
-		['mainLoop_post', \&mainLoop_pre],
+		#['mainLoop_post', \&mainLoop_pre],
 		['packet/hp_sp_changed' => sub { $weak->values(qw(char_hp char_sp)) } ],
 		['packet/stat_info' => sub { $weak->values } ],
 		['packet/stat_info2' => sub { $weak->values(qw(char_str char_str_bonus char_agi char_agi_bonus char_vit char_vit_bonus char_int char_int_bonus char_dex char_dex_bonus char_luk char_luk_bonus)) } ],
@@ -53,56 +51,62 @@ sub new {
 }
 
 
-sub mainLoop_pre 
-{
-	return unless timeOut $timeout, 1;
-	
-	return unless $webMonitorPlugin::socketServer->getAuthenCsrf() eq 1;
-	
-	if( $timeremain > 0 )
-	{
-		$timeremain -= 1;
-		Scalar::Util::weaken(my $weak = $webMonitorPlugin::socketServer);
-		$weak->values(qw(time_session));
-	}
-	else
-	{
-		$webMonitorPlugin::socketServer->setAuthenCsrf(0);
-	}
-	
-	$timeout = time;
+#sub mainLoop_pre 
+#{
+#	return unless timeOut $timeout, 1;
+#	
+#	return unless $webMonitorPlugin::socketServer->getAuthenCsrf() eq 1;
+#	
+#	if( $timeremain > 0 )
+#	{
+#		$timeremain -= 1;
+#		Scalar::Util::weaken(my $weak = $webMonitorPlugin::socketServer);
+#		$weak->values(qw(time_session));
+#	}
+#	else
+#	{
+#		$webMonitorPlugin::socketServer->setAuthenCsrf(0);
+#	}
+#	
+#	$timeout = time;
+#}
+
+sub setAdminIP {
+    my ( $self, $adminIP ) = @_;
+    $self->{adminIP} = $adminIP if defined($adminIP);
+    return $self->{adminIP};
 }
 
-sub setAuthenCsrf {
-    my ( $self, $authen_csrf ) = @_;
-    $self->{authen_csrf} = $authen_csrf if defined($authen_csrf);
-	if( $self->{authen_csrf} eq 1 )
-	{
-		$timeremain = 300;
-	}
-    return $self->{authen_csrf};
-}
+#sub setAuthenCsrf {
+#    my ( $self, $authen_csrf ) = @_;
+#    $self->{authen_csrf} = $authen_csrf if defined($authen_csrf);
+#	if( $self->{authen_csrf} eq 1 )
+#	{
+#		#$timeremain = 300;
+#	}
+#    return $self->{authen_csrf};
+#}
 
-sub getAuthenCsrf {
-    my( $self ) = @_;
-    return $self->{authen_csrf};
-}
+#sub getAuthenCsrf {
+#    my( $self ) = @_;
+#    return $self->{authen_csrf};
+#}
 
 sub console {
 	my ($type, $domain, $level, $currentVerbosity, $message, $data) = @_;
 	my $self = $data->[0] or return;
 
 	if ($level <= $currentVerbosity) {
-		$self->broadcast(encode_json({type => 'console', data => {
-			message => $message,
-			domain => $domain,
-			class => webMonitorServer::messageClass($type, $domain),
-		}}));
+			$self->broadcast(encode_json({type => 'console', data => {
+				message => $message,
+				domain => $domain,
+				class => webMonitorServer::messageClass($type, $domain),
+			}}),$self->{adminIP});
 	}
 }
 
 my %valueSources = (
-	time_session => sub { $timeremain },
+	#time_session => sub { $timeremain },
 	char_lv => sub { $char->{lv} },
 	char_lv_job => sub { $char->{lv_job} },
 	char_hp => sub { $char->{hp} },
@@ -163,10 +167,7 @@ sub values {
 	$oldValues{$_} = $values{$_} for keys %values;
 	return unless %values;
 	
-	if( $self->{authen_csrf} eq 1 )
-	{
-		$self->broadcast(encode_json({type => 'values', data => \%values}));
-	}
+	$self->broadcast(encode_json({type => 'values', data => \%values}),$self->{adminIP});
 }
 
 1;

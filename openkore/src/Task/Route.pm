@@ -27,7 +27,8 @@ use Task::WithSubtask;
 use base qw(Task::WithSubtask);
 use Task::Move;
 
-use Globals qw($field $net %config);
+#use Globals qw($field $net %config);
+use Globals;
 use Log qw(message debug warning);
 use Network;
 use Field;
@@ -313,11 +314,22 @@ sub iterate {
 				$self->{new_x} = $self->{solution}[$self->{index}]{x};
 				$self->{new_y} = $self->{solution}[$self->{index}]{y};
 
+				my $findnewway = 0;
+				for my $ID (@spellsID) {
+					my $spell = $spells{$ID};
+					next unless $spell;
+					if ($spell->{type} == 0x80 || $spell->{type} == 0x81) {
+						if ($spell->{pos}{x} == $self->{new_x} && $spell->{pos}{y} == $self->{new_y} ) {
+							message TF("Destination is warp portal pos %d %d.\n",$spell->{pos}{x},$spell->{pos}{y}), "route";
+							$findnewway = 1;
+						}
+					}
+				}
 				# But first, check whether the distance of the next point isn't abnormally large.
 				# If it is, then we've moved to an unexpected place. This could be caused by auto-attack,
 				# for example.
 				my %nextPos = (x => $self->{new_x}, y => $self->{new_y});
-				if (distance(\%nextPos, $pos) > $config{$self->{actor}{configPrefix}.'route_step'}) {
+				if (distance(\%nextPos, $pos) > $config{$self->{actor}{configPrefix}.'route_step'} || $findnewway ) {
 					debug "Route $self->{actor} - movement interrupted: reset route\n", "route";
 					$self->{stage} = '';
 
@@ -389,7 +401,24 @@ sub getRoute {
 	my %dest = %{$dest};
 	Misc::closestWalkableSpot($field, \%start);
 	Misc::closestWalkableSpot($field, \%dest);
+	
+	my $fields2 = undef;
 
+	for my $ID (@spellsID) {
+		my $spell = $spells{$ID};
+		next unless $spell;
+		#message TF("Debug found spell %d pos %d %d.\n",$spell->{type},$spell->{pos}{x},$spell->{pos}{y}), "route";
+		if ($spell->{type} == 0x80 || $spell->{type} == 0x81) {
+			message TF("Set warp portal to non walkable pos %d %d.\n",$spell->{pos}{x},$spell->{pos}{y}), "route";
+			if( $fields2 == undef )
+			{
+				$fields2 = $field->clone();
+			}
+			$fields2->setBlockNonWalk($spell->{pos}{x},$spell->{pos}{y});
+			$avoidWalls = 0;
+		}
+	}
+				
 	# Generate map weights (for wall avoidance)
 	my $weights;
 	if ($avoidWalls) {
@@ -400,13 +429,26 @@ sub getRoute {
 		$weights = chr(255) . (chr(1) x 255);
 	}
 
-	# Calculate path
-	my $pathfinding = new PathFinding(
+	my $pathfinding = undef;
+	if( $fields2 == undef )
+	{
+		$pathfinding = new PathFinding(
 		start => \%start,
 		dest  => \%dest,
 		field => $field,
 		weights => $weights
-	);
+		);
+	}
+	else{
+		$pathfinding = new PathFinding(
+		start => \%start,
+		dest  => \%dest,
+		field => $fields2,
+		weights => $weights
+		);
+	}
+	# Calculate path
+
 	return undef if (!$pathfinding);
 
 	my $ret;

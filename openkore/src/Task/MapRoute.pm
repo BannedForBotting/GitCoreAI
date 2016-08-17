@@ -178,28 +178,57 @@ sub iterate {
 			}
 
 		} elsif (distance($self->{actor}{pos_to}, $self->{mapSolution}[0]{pos}) <= $dist) {
-			my ($from,$to) = split /=/, $self->{mapSolution}[0]{portal};
-			if (($self->{actor}{zeny} >= $portals_lut{$from}{dest}{$to}{cost}) || ($char->inventory->getByNameID(7060) && $portals_lut{$from}{dest}{$to}{allow_ticket})) {
-				# We have enough money for this service.
-				$self->{substage} = 'Waiting for Warp';
-				@{$self}{qw(old_x old_y)} = @{$self->{actor}{pos_to}}{qw(x y)};
-				$self->{old_map} = $field->baseName;
-				my $task = new Task::TalkNPC(
+			my ($from,$to) = split /=/, $self->{mapSolution}[0]{portal};		
+			my $findnewway = 0;
+			for my $ID (@spellsID) {
+				my $spell = $spells{$ID};
+				next unless $spell;
+				if ($spell->{type} == 0x80 || $spell->{type} == 0x81) {
+					if ($spell->{pos}{x} == $self->{actor}{pos_to}{x} && $spell->{pos}{y} == $self->{actor}{pos_to}{y} ) {
+						message TF("Destination is warp portal pos %d %d.\n",$spell->{pos}{x},$spell->{pos}{y}), "route";
+						$findnewway = 1;
+					}
+				}
+			}
+			
+			if( $findnewway == 1 )
+			{
+				$dist = rand(10) + 1;
+				debug "Find new way towards the NPC, dist $dist\n", "route";
+				my $task = new Task::Route(
+					actor => $self->{actor},
 					x => $self->{mapSolution}[0]{pos}{x},
 					y => $self->{mapSolution}[0]{pos}{y},
-					sequence => $self->{mapSolution}[0]{steps});
+					maxTime => $self->{maxTime},
+					distFromGoal => $dist,
+					avoidWalls => 0,
+					solution => \@solution
+				);
 				$self->setSubtask($task);
-			} else {
-				error TF("You need %sz to pay for warp service at %s (%s,%s), you have %sz.\n",
-					$portals_lut{$from}{dest}{$to}{cost},
-					$field->baseName, $self->{mapSolution}[0]{pos}{x}, $self->{mapSolution}[0]{pos}{y},
-					$self->{actor}{zeny}), "route";
-					AI::clear(qw/move route mapRoute/);
-					message T("Stopped all movement\n"), "success";
-# TODO: need to pave another route
-#				$self->initMapCalculator(); # Redo MAP router
 			}
-
+			else
+			{
+				if (($self->{actor}{zeny} >= $portals_lut{$from}{dest}{$to}{cost}) || ($char->inventory->getByNameID(7060) && $portals_lut{$from}{dest}{$to}{allow_ticket})) {
+					# We have enough money for this service.
+					$self->{substage} = 'Waiting for Warp';
+					@{$self}{qw(old_x old_y)} = @{$self->{actor}{pos_to}}{qw(x y)};
+					$self->{old_map} = $field->baseName;
+					my $task = new Task::TalkNPC(
+						x => $self->{mapSolution}[0]{pos}{x},
+						y => $self->{mapSolution}[0]{pos}{y},
+						sequence => $self->{mapSolution}[0]{steps});
+					$self->setSubtask($task);
+				} else {
+					error TF("You need %sz to pay for warp service at %s (%s,%s), you have %sz.\n",
+						$portals_lut{$from}{dest}{$to}{cost},
+						$field->baseName, $self->{mapSolution}[0]{pos}{x}, $self->{mapSolution}[0]{pos}{y},
+						$self->{actor}{zeny}), "route";
+						AI::clear(qw/move route mapRoute/);
+						message T("Stopped all movement\n"), "success";
+	# TODO: need to pave another route
+	#				$self->initMapCalculator(); # Redo MAP router
+				}
+			}
 		} elsif ( $self->{maxTime} && time - $self->{time_start} > $self->{maxTime} ) {
 			# We spent too long a time.
 			debug "MapRoute - We spent too much time; bailing out.\n", "route";

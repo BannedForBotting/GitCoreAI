@@ -111,6 +111,12 @@ sub new {
 	return $self;
 }
 
+sub clone {
+    my ($self) = @_;
+    my $copy = bless { %$self }, ref $self;
+    return $copy;
+}
+
 ##
 # String $Field->name()
 #
@@ -199,6 +205,16 @@ sub getBlock {
 		return NON_WALKABLE;
 	} else {
 		return ord(substr($self->{rawMap}, ($y * $self->{width}) + $x, 1));
+	}
+}
+
+sub setBlockNonWalk {
+	my ($self, $x, $y) = @_;
+	if ($self->isOffMap($x, $y)) {
+		return 0;
+	} else {
+		substr($self->{rawMap}, ($y * $self->{width}) + $x, 1,chr(NON_WALKABLE));
+		return 1;
 	}
 }
 

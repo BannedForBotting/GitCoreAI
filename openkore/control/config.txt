@@ -303,11 +303,11 @@ showAllDamage 0
 manualURL http://wiki.openkore.com/index.php?title=Manual
 forumURL http://forums.openkore.com
 
-logChat 1
-logPrivateChat 1
-logPartyChat 1
-logGuildChat 1
-logSystemChat 1
+logChat 0
+logPrivateChat 0
+logPartyChat 0
+logGuildChat 0
+logSystemChat 0
 logEmoticons
 logConsole 0
 logAppendUsername 0

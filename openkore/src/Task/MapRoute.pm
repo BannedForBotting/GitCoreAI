@@ -158,7 +158,7 @@ sub iterate {
 		shift @{$self->{mapSolution}};
 
 	} elsif ( $self->{mapSolution}[0]{steps} ) {
-		my $dist = $self->{mapSolution}[0]{dist} || 10;
+		my $dist = $self->{mapSolution}[0]{dist} || rand(5) + 7;
 
 		# If current solution has conversation steps specified
 		if ( $self->{substage} eq 'Waiting for Warp' ) {
@@ -201,7 +201,7 @@ sub iterate {
 					y => $self->{mapSolution}[0]{pos}{y},
 					maxTime => $self->{maxTime},
 					distFromGoal => $dist,
-					avoidWalls => 0,
+					avoidWalls => 1,
 					solution => \@solution
 				);
 				$self->setSubtask($task);

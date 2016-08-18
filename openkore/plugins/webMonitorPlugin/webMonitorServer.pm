@@ -582,7 +582,7 @@ sub request {
 			my $title = $skill->getHandle;
 
 			# To finalize, add the elements into the array's
-			push @skillsIco, "<img src=\"http://static.divine-pride.net/images/skill/" . lc($title) . ".png\"></img>";
+			push @skillsIco, "<img src=\"http://rune-nifelheim.com/db/skills/img/" . lc($title) . ".gif\"></img>";
 			push @skillsIcoUp, $ico_up;
 			push @skillsName, '<abbr title="' . $title . '">' . $skill->getName() . '</abbr>';
 			push @skillsLevel, $char->getSkillLevel($skill);
@@ -629,7 +629,7 @@ sub request {
 				my $title = $homunculoSkill->getHandle;
 
 				# To finalize, add the elements into the array's
-				push @homunculoSkillsIco, "<img src=\"http://static.divine-pride.net/images/skill/" . lc($title) . ".png\"></img>";
+				push @homunculoSkillsIco, "<img src=\"http://rune-nifelheim.com/db/skills/img/" . lc($title) . ".gif\"></img>";
 				push @homunculoSkillsIcoUp, $homunculoIcoUp;
 				push @homunculoSkillsName, '<abbr title="' . $title . '">' . $homunculoSkill->getName() . '</abbr>';
 				push @homunculoSkillsLevel, ($char->getSkillLevel($homunculoSkill)) ? $char->getSkillLevel($homunculoSkill) : 0;

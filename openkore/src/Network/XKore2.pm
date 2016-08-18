@@ -35,7 +35,8 @@ our ($hooks, $sessionStore, $accountServer, $charServer, $mapServer ,$mapServerC
 #
 # Start the X-Kore 2 subsystem.
 sub start {
-	my $publicIP = $ENV{'XIP'} || '127.0.0.1';
+	#my $publicIP = $ENV{'XIP'} || '127.0.0.1';
+	my $publicIP = '0.0.0.0';
 	$sessionStore = new Base::Ragnarok::SessionStore();
 	$mapServer = new Network::XKore2::MapServer(
 		host => $publicIP,

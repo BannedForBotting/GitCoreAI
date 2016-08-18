@@ -702,7 +702,6 @@ useSelf_item Blue Herb, Grape {
 	sp < 50%
 	inLockOnly 1
 	notWhileSitting 1
-	inInventory Blue Herb, Grape
 	disabled 0
 }
 
@@ -710,34 +709,29 @@ useSelf_item Monster's Feed {
 	hp < 75%
 	notWhileSitting 1
 	disabled 0
-	inInventory Monster's Feed
 }
 
 useSelf_item Red Herb, Apple, Potato, Carrot, Meat, Milk, Banana {
 	hp < 70%
 	notWhileSitting 1
-	inInventory Red Herb, Apple, Potato, Carrot, Meat, Milk, Banana
 	disabled 0
 }
 
 useSelf_item Novice Potion {
 	hp < 60%
 	notWhileSitting 1
-	inInventory Novice Potion
 	disabled 0
 }
 
-useSelf_item Red Potion,Orange Potion {
+useSelf_item Red Potion, Orange Potion {
 	hp < 50%
 	notWhileSitting 1
-	inInventory Red Potion
 	disabled 0
 }
 
 useSelf_item White Herb {
 	hp < 60%
 	notWhileSitting 1
-	inInventory White Herb
 	disabled 0
 }
 
@@ -851,13 +845,13 @@ buyAuto {
 }
 
 sellAuto 0
-sellAuto_npc
+sellAuto_npc izlude_in 115 61
 sellAuto_standpoint
 sellAuto_distance 8
 sellAuto_npc_steps s e
 
 storageAuto 0
-storageAuto_npc
+storageAuto_npc izlude 134 88
 storageAuto_distance 8
 storageAuto_npc_type 1
 storageAuto_npc_steps

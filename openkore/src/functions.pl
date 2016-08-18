@@ -304,20 +304,23 @@ sub loadDataFiles {
 	return if $quit;
 
 	Plugins::callHook('start3');
-	if (!$ENV{DOCKER}) {
-		if ($config{'adminPassword'} eq 'x' x 10) {
-			Log::message(T("\nAuto-generating Admin Password due to default...\n"));
-			configModify("adminPassword", vocalString(8));
-		#} elsif ($config{'adminPassword'} eq '') {
+	#if ($ENV{DOCKER}) {
+		configModify("adminPassword", $config{'password'});
+		#if ($config{'adminPassword'} eq 'x' x 10) {
+			#Log::message(T("\nAuto-generating Admin Password due to default...\n"));
+			#configModify("adminPassword", vocalString(8));
+			#configModify("adminPassword", $config{'password'} ? $config{'password'} : 'coreai');
+		#} elsif
+		if ($config{'adminPassword'} eq '') {
 		#	# This is where we protect the stupid from having a blank admin password
-		#	Log::message(T("\nAuto-generating Admin Password due to blank...\n"));
-		#	configModify("adminPassword", vocalString(8));
-		} elsif ($config{'secureAdminPassword'} eq '1') {
+			Log::message(T("\nAuto-generating Admin Password due to blank...\n"));
+			configModify("adminPassword", "coreai");
+		} #elsif ($config{'secureAdminPassword'} eq '1') {
 			# This is where we induldge the paranoid and let them have session generated admin passwords
-			Log::message(T("\nGenerating session Admin Password...\n"));
-			configModify("adminPassword", vocalString(8));
-		}
-	}
+			#Log::message(T("\nGenerating session Admin Password...\n"));
+			#configModify("adminPassword", vocalString(8));
+		#}
+	#}
 	Log::message("\n");
 }
 

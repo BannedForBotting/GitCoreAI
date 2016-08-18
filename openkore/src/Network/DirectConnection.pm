@@ -343,6 +343,11 @@ sub checkConnection {
 			return;
 		}
 		$reconnectCount++;
+		if ($reconnectCount > 1) {
+			my $rtime = int(rand(48) * 3) + $reconnectCount + 12;
+			message ("Too many relog attempt, sleep for" . $rtime ." seconds\n");
+			sleep $rtime;
+		}
 		$self->serverConnect($master->{ip}, $master->{port});
 
 		# call plugin's hook to determine if we can continue the work

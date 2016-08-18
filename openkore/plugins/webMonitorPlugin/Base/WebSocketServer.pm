@@ -23,7 +23,7 @@ use Time::HiRes qw(time);
 use Protocol::WebSocket;
 use Base::Server;
 use base qw(Base::Server);
-use JSON;
+
 
 ##
 # Base::WebSocketServer Base::WebSocketServer->new([int port, String bind])

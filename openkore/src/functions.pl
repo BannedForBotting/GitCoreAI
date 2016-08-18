@@ -96,7 +96,7 @@ sub mainLoop {
 		$state = STATE_PROMPT;
 
 	} elsif ($state == STATE_PROMPT) {
-		#promptFirstTimeInformation();
+		promptFirstTimeInformation();
 		$state = STATE_FINAL_INIT;
 
 	} elsif ($state == STATE_FINAL_INIT) {

@@ -429,6 +429,19 @@ pet_return 20
 # You can copy & paste any block multiple times. So if you want to
 # configure two attack skills, just duplicate the attackSkillSlot block.
 
+attackSkillSlot Bowling Bash {
+	lvl 10
+	dist 1.5
+	sp > 20
+	onAction Attack
+	aggressives > 2
+	notMonsters Hydra
+	inLockOnly 1
+	timeout 0
+	disabled 1
+	maxUses 5
+}
+
 attackSkillSlot {
 	lvl 10
 	dist 1.5
@@ -521,6 +534,17 @@ doCommand {
 	inCart
 	inMap
 	manualAI 0
+}
+
+useSelf_skill Two-Hand Quicken {
+	lvl 10
+	sp >50
+	onAction Attack
+	whenStatusInactive Two-Hand Quicken
+	inLockOnly 1
+	notWhileSitting 1
+	notInTown 1
+	disabled 1
 }
 
 useSelf_skill {
@@ -620,6 +644,12 @@ autoSwitch {
 	arrow
 	distance
 	useWeapon
+}
+
+equipAuto {
+	topHead Pecopeco Hariband
+	onAction mapRoute, Route
+	disabled 1
 }
 
 equipAuto {

@@ -433,37 +433,40 @@ sub visualDump {
 	# doesn't work right with debugPacket_sent
 	#no encoding 'utf8';
 	#use bytes;
-
-	$dump = "================================================\n";
-	if (defined $label) {
-		$dump .= sprintf("%-15s [%d bytes]   %s\n", $label, length($msg), getFormattedDate(int(time)));
-	} else {
-		$dump .= sprintf("%d bytes   %s\n", length($msg), getFormattedDate(int(time)));
-	}
-
-	for (my $i = 0; $i < length($msg); $i += 16) {
-		my $line;
-		my $data = substr($msg, $i, 16);
-		my $rawData = '';
-
-		for (my $j = 0; $j < length($data); $j++) {
-			my $char = substr($data, $j, 1);
-			if (ord($char) < 32 || ord($char) > 126) {
-				$rawData .= '.';
-			} else {
-				$rawData .= substr($data, $j, 1);
-			}
+	
+	if (!$ENV{'DOCKER'}) {
+		$dump = "================================================\n";
+		if (defined $label) {
+			$dump .= sprintf("%-15s [%d bytes]   %s\n", $label, length($msg), getFormattedDate(int(time)));
+		} else {
+			$dump .= sprintf("%d bytes   %s\n", length($msg), getFormattedDate(int(time)));
 		}
 
-		$line = getHex(substr($data, 0, 8));
-		$line .= '    ' . getHex(substr($data, 8)) if (length($data) > 8);
+		for (my $i = 0; $i < length($msg); $i += 16) {
+			my $line;
+			my $data = substr($msg, $i, 16);
+			my $rawData = '';
 
-		$line .= ' ' x (50 - length($line)) if (length($line) < 54);
-		$line .= "    $rawData\n";
-		$line = sprintf("%3d>  ", $i) . $line;
-		$dump .= $line;
+			for (my $j = 0; $j < length($data); $j++) {
+				my $char = substr($data, $j, 1);
+				if (ord($char) < 32 || ord($char) > 126) {
+					$rawData .= '.';
+				} else {
+					$rawData .= substr($data, $j, 1);
+				}
+			}
+
+			$line = getHex(substr($data, 0, 8));
+			$line .= '    ' . getHex(substr($data, 8)) if (length($data) > 8);
+
+			$line .= ' ' x (50 - length($line)) if (length($line) < 54);
+			$line .= "    $rawData\n";
+			$line = sprintf("%3d>  ", $i) . $line;
+			$dump .= $line;
+		}
+		message $dump;
 	}
-	message $dump;
+	
 }
 
 

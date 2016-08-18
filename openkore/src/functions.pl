@@ -151,9 +151,6 @@ sub loadDataFiles {
 		loader => [\&parseConfigFile, \%config],
 		internalName => 'config.txt',
 		autoSearch => 0);
-	#force debug off
-	#Settings::addControlFile('config_override.txt',
-	#	loader => [\&parseConfigFile, \%config]);
 	Settings::addControlFile('consolecolors.txt',
 		loader => [\&parseSectionedFile, \%consoleColors]);
 	Settings::addControlFile(Settings::getMonControlFilename(),

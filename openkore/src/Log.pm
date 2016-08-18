@@ -337,6 +337,7 @@ sub error {
 #
 # Prints a debugging message. See the description for Log.pm for more details about the parameters.
 sub debug {
+	
 	my ($message, $domain, $level) = @_;
 	$level = 1 if (!defined $level);
 	$level = 0 if (existsInList($config{debugDomains}, $_[1]));
@@ -345,9 +346,10 @@ sub debug {
 		$message,
 		$domain,
 		$level,
-		(defined $config{'debug'}) ? $config{'debug'} : 0,
+		(defined $config{'debug'}) ? ($ENV{'DOCKER'} ? 0 : ($config{'debug'} || 0)) : 0,
 		\%debugConsole,
 		\%debugFiles);
+		
 }
 
 

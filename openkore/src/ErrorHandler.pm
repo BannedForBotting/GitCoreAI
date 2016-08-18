@@ -28,13 +28,13 @@ use Translation;
 
 sub showError {
 	$net->serverDisconnect() if ($net);
-	exit 1;
-	# if (!$Globals::interface || UNIVERSAL::isa($Globals::interface, "Interface::Startup") || UNIVERSAL::isa($Globals::interface, "Interface::Socket")) {
-		# print TF("%s\nPress ENTER to exit this program.\n", $_[0]);
-		# <STDIN>;
-	# } else {
-		# $Globals::interface->errorDialog($_[0]);
-	# }
+	
+	if (!$Globals::interface || UNIVERSAL::isa($Globals::interface, "Interface::Startup") || UNIVERSAL::isa($Globals::interface, "Interface::Socket")) {
+		print TF("%s\nPress ENTER to exit this program.\n", $_[0]);
+		#<STDIN>;
+	} else {
+		$Globals::interface->errorDialog($_[0]);
+	}
 }
 
 sub errorHandler {

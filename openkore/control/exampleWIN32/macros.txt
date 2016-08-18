@@ -21,17 +21,3 @@
 #	}
 #	timeout 1
 #}
-
-## Experimental when GM full strip
-automacro GM_Fullstrip {
-	status Strip Weapon
-	status Strip Shield
-	status Strip Armor
-	status Strip Helm
-	status Strip Accessory
-	call {
-		do tele
-		do relog 7200
-	}
-	timeout 10
-}

@@ -1,18 +1,38 @@
-# Please Read the Users Manual
+﻿# Please Read the Users Manual
 # The Manual is located at http://wiki.openkore.com/index.php?title=Manual
 
 ######## Login options and server-specific options ########
 
 master Thai
-server 0
+server 
 username
 password
 loginPinCode
-char 0
+char 
+
+# Poseidon Settings (http://wiki.openkore.com/index.php/PoseidonServer)
+# They must be the same as Query Server config in Poseidon.txt
+poseidonServer 127.0.0.1
+poseidonPort 24390
+
+bindIp
+forceMapIP
 
 # 1 = hook into RO client, 2 = Act as stand-alone proxy, proxy = act as true proxy
 # http://wiki.openkore.com/index.php/XKore
 XKore 3
+XKore_port 2350
+XKore_dll NetRedirect.dll
+XKore_autoAttachIfOneExe 1
+XKore_silent 1
+XKore_bypassBotDetection 0
+XKore_exeName ragexe.exe
+
+# XKore 2 / Proxy configuration
+XKore_listenIp 0.0.0.0
+XKore_listenPort 6901
+XKore_publicIp 0.0.0.0
+XKore_ID
 
 # It is not advised to set secureAdminPassword if you're using 
 secureAdminPassword 0
@@ -40,9 +60,9 @@ attackAuto_onlyWhenSafe 0
 attackAuto_followTarget 1
 attackAuto_inLockOnly 1
 attackAuto_notInTown 1
-attackDistance 1.0
-attackDistanceAuto 1
-attackMaxDistance 1.5
+attackDistance 1.5
+attackDistanceAuto 0
+attackMaxDistance 2
 attackMaxRouteDistance 100
 attackMaxRouteTime 4
 attackMinPlayerDistance 2
@@ -199,7 +219,7 @@ shop_random 0
 shop_useSkill 1
 
 sitAuto_hp_lower 10
-sitAuto_hp_upper 100
+sitAuto_hp_upper 10
 sitAuto_sp_lower 0
 sitAuto_sp_upper 0
 sitAuto_follow 0
@@ -283,11 +303,11 @@ showAllDamage 0
 manualURL http://wiki.openkore.com/index.php?title=Manual
 forumURL http://forums.openkore.com
 
-logChat 0
-logPrivateChat 0
-logPartyChat 0
-logGuildChat 0
-logSystemChat 0
+logChat 1
+logPrivateChat 1
+logPartyChat 1
+logGuildChat 1
+logSystemChat 1
 logEmoticons
 logConsole 0
 logAppendUsername 0
@@ -707,7 +727,7 @@ useSelf_item Novice Potion {
 	disabled 0
 }
 
-useSelf_item Red Potion {
+useSelf_item Red Potion,Orange Potion {
 	hp < 50%
 	notWhileSitting 1
 	inInventory Red Potion
@@ -771,6 +791,16 @@ buyAuto Awakening Potion {
 }
 
 buyAuto Red Potion {
+	npc izlude_in 115 61
+	standpoint
+	distance 8
+	price
+	minAmount 1
+	maxAmount 200
+	disabled 1
+}
+
+buyAuto Orange Potion {
 	npc izlude_in 115 61
 	standpoint
 	distance 8
@@ -870,7 +900,30 @@ avoidSkill Warp Portal {
    step 10
 }
 
+# Please Read the Users Manual
+# The Manual is located at http://wiki.openkore.com/index.php?title=Manual
+
 webBind 0.0.0.0
+webPort 6904
+webSPort 6905
 webMapURL /maps/%s.png
 webDBLink_monster	http://ratemyserver.net/index.php?page=mob_db&mob_id=%s
 webDBLink_item	http://ratemyserver.net/index.php?page=item_db&item_id=%s
+
+######## Debugging options; only useful for developers ########
+
+debug 0
+debugPacket_unparsed 0
+debugPacket_received 0
+debugPacket_ro_sent 0
+debugPacket_sent 0
+debugPacket_exclude
+debugPacket_include
+debugPacket_include_dumpMethod
+debugDomains
+logToFile_Debug
+logToFile_Errors
+logToFile_Messages
+logToFile_Warnings
+history_max 50
+macro_orphans terminate

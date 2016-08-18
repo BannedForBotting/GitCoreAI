@@ -327,8 +327,7 @@ sub sendToServer {
 	$net->serverSend($msg);
 	$bytesSent += length($msg);
 	
-	#if ($config{debugPacket_sent} && !existsInList($config{debugPacket_exclude}, $messageID) && $config{debugPacket_include_dumpMethod} < 3) {
-	if (0 == 1) {
+	if ($config{debugPacket_sent} && !existsInList($config{debugPacket_exclude}, $messageID) && $config{debugPacket_include_dumpMethod} < 3) {
 		my $label = $packetDescriptions{Send}{$messageID} ?
 			"[$packetDescriptions{Send}{$messageID}]" : '';
 		if ($config{debugPacket_sent} == 1) {
@@ -336,25 +335,23 @@ sub sendToServer {
 		} else {
 			Misc::visualDump($msg, ">> Sent packet: $messageID  $label");
 		}
-		
-			if ($config{'debugPacket_include_dumpMethod'} && !existsInList($config{debugPacket_exclude}, $messageID) && existsInList($config{'debugPacket_include'}, $messageID)) {
-			my $label = $packetDescriptions{Send}{$messageID} ?
-				"[$packetDescriptions{Send}{$messageID}]" : '';
-			if ($config{debugPacket_include_dumpMethod} == 3 && existsInList($config{'debugPacket_include'}, $messageID)) {
-				#Security concern: Dump only when you included the header in config
-				Misc::dumpData($msg, 1, 1);
-			} elsif ($config{debugPacket_include_dumpMethod} == 4) {
-				open my $dump, '>>', 'DUMP_LINE.txt';
-				print $dump unpack('H*', $msg) . "\n";
-			} elsif ($config{debugPacket_include_dumpMethod} == 5 && existsInList($config{'debugPacket_include'}, $messageID)) {
-				#Security concern: Dump only when you included the header in config
-				open my $dump, '>>', 'DUMP_HEAD.txt';
-				print $dump sprintf("%-4s %2d %s%s\n", $messageID, length($msg), 'Send', $label);
-			}
-		}
 	}
 	
-
+	if ($config{'debugPacket_include_dumpMethod'} && !existsInList($config{debugPacket_exclude}, $messageID) && existsInList($config{'debugPacket_include'}, $messageID)) {
+		my $label = $packetDescriptions{Send}{$messageID} ?
+			"[$packetDescriptions{Send}{$messageID}]" : '';
+		if ($config{debugPacket_include_dumpMethod} == 3 && existsInList($config{'debugPacket_include'}, $messageID)) {
+			#Security concern: Dump only when you included the header in config
+			Misc::dumpData($msg, 1, 1);
+		} elsif ($config{debugPacket_include_dumpMethod} == 4) {
+			open my $dump, '>>', 'DUMP_LINE.txt';
+			print $dump unpack('H*', $msg) . "\n";
+		} elsif ($config{debugPacket_include_dumpMethod} == 5 && existsInList($config{'debugPacket_include'}, $messageID)) {
+			#Security concern: Dump only when you included the header in config
+			open my $dump, '>>', 'DUMP_HEAD.txt';
+			print $dump sprintf("%-4s %2d %s%s\n", $messageID, length($msg), 'Send', $label);
+		}
+	}
 }
 
 ##

@@ -573,8 +573,6 @@ Free Ticket for Kafra Transportation 900 0 0
 Novice Potion 900 0 0
 Novice Fly Wing 900 0 0
 Novice Butterfly Wing 900 0 0
-Novice_Adventurer's_Suit 1 0 0
-
 
 "Bowman Scroll 1" 0 0 0
 "Bowman Scroll 2" 0 0 0

@@ -3228,35 +3228,40 @@ sub hp_sp_changed {
 sub login_error {
 	my ($self, $args) = @_;
 
+	#$net->serverDisconnect();
 	if ($args->{type} == REFUSE_INVALID_ID) {
 		error TF("Account name [%s] doesn't exist\n", $config{'username'}), "connection";
-		if (!$net->clientAlive() && !$config{'ignoreInvalidLogin'} && !UNIVERSAL::isa($net, 'Network::XKoreProxy')) {
-			#my $username = $interface->query(T("Enter your Ragnarok Online username again."));
-			#if (defined($username)) {
-			#	configModify('username', $username, 1);
-			#	$timeout_ex{master}{time} = 0;
-			#	$conState_tries = 0;
-			#} else {
-			#	quit();
-			#	return;
-			#}
+		if ($ENV{'DOCKER'}) {
 			quit();
 			return;
 		}
+		if (!$net->clientAlive() && !$config{'ignoreInvalidLogin'} && !UNIVERSAL::isa($net, 'Network::XKoreProxy')) {
+			my $username = $interface->query(T("Enter your Ragnarok Online username again."));
+			if (defined($username)) {
+				configModify('username', $username, 1);
+				$timeout_ex{master}{time} = 0;
+				$conState_tries = 0;
+			} else {
+				quit();
+				return;
+			}
+		}
 	} elsif ($args->{type} == REFUSE_INVALID_PASSWD) {
 		error TF("Password Error for account [%s]\n", $config{'username'}), "connection";
-		if (!$net->clientAlive() && !$config{'ignoreInvalidLogin'} && !UNIVERSAL::isa($net, 'Network::XKoreProxy')) {
-			#my $password = $interface->query(T("Enter your Ragnarok Online password again."), isPassword => 1);
-			#if (defined($password)) {
-			#	configModify('password', $password, 1);
-			#	$timeout_ex{master}{time} = 0;
-			#	$conState_tries = 0;
-			#} else {
-			#	quit();
-			#	return;
-			#}
+		if ($ENV{'DOCKER'}) {
 			quit();
 			return;
+		}
+		if (!$net->clientAlive() && !$config{'ignoreInvalidLogin'} && !UNIVERSAL::isa($net, 'Network::XKoreProxy')) {
+			my $password = $interface->query(T("Enter your Ragnarok Online password again."), isPassword => 1);
+			if (defined($password)) {
+				configModify('password', $password, 1);
+				$timeout_ex{master}{time} = 0;
+				$conState_tries = 0;
+			} else {
+				quit();
+				return;
+			}
 		}
 	} elsif ($args->{type} == ACCEPT_ID_PASSWD) {
 		error T("The server has denied your connection.\n"), "connection";
@@ -3286,7 +3291,6 @@ sub login_error {
 		$versionSearch = 0;
 		writeSectionedFileIntact(Settings::getTableFilename("servers.txt"), \%masterServers);
 	}
-	#$net->serverDisconnect();
 }
 
 sub login_error_game_login_server {
@@ -5820,13 +5824,11 @@ sub storage_password_request {
 			message T("Please enter a new character password:\n");
 		} else {
 			if ($config{storageAuto_password} eq '') {
-				#my $input = $interface->query(T("You've never set a storage password before.\nYou must set a storage password before you can use the storage.\nPlease enter a new storage password:"), isPassword => 1);
-				#if (!defined($input)) {
-				#	return;
-				#}
-				#configModify('storageAuto_password', $input, 1);
-				quit();
-				return;
+				my $input = $interface->query(T("You've never set a storage password before.\nYou must set a storage password before you can use the storage.\nPlease enter a new storage password:"), isPassword => 1);
+				if (!defined($input)) {
+					return;
+				}
+				configModify('storageAuto_password', $input, 1);
 			}
 		}
 
@@ -5848,27 +5850,21 @@ sub storage_password_request {
 	} elsif ($args->{flag} == 1) {
 		if ($args->{switch} eq '023E') {
 			if ($config{charSelect_password} eq '') {
-				#my $input = $interface->query(T("Please enter your character password."), isPassword => 1);
-				#if (!defined($input)) {
-				#	return;
-				#}
-				#configModify('charSelect_password', $input, 1);
-				#message TF("Character password set to: %s\n", $input), "success";
-				message TF("Character password : PLEASE SET!\n"), "success";
-				quit();
-				return;
+				my $input = $interface->query(T("Please enter your character password."), isPassword => 1);
+				if (!defined($input)) {
+					return;
+				}
+				configModify('charSelect_password', $input, 1);
+				message TF("Character password set to: %s\n", $input), "success";
 			}
 		} else {
 			if ($config{storageAuto_password} eq '') {
-				#my $input = $interface->query(T("Please enter your storage password."), isPassword => 1);
-				#if (!defined($input)) {
-				#	return;
-				#}
-				#configModify('storageAuto_password', $input, 1);
-				#message TF("Storage password set to: %s\n", $input), "success";
-				message TF("Storage password : PLEASE SET!\n"), "success";
-				quit();
-				return;
+				my $input = $interface->query(T("Please enter your storage password."), isPassword => 1);
+				if (!defined($input)) {
+					return;
+				}
+				configModify('storageAuto_password', $input, 1);
+				message TF("Storage password set to: %s\n", $input), "success";
 			}
 		}
 

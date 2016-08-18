@@ -1808,9 +1808,14 @@ sub login_pin_code_request {
 	# 7 - disabled?
 	# 8 - incorrect
 	
-	# XKore 3 let's user handle pin themself
-	if ($XKore_version eq "3" ) {
-		message T("Let's user handle pin\n");
+	# XKore 2 disconnect if flag is not 7
+	if ((($XKore_version eq "2" ) || ($XKore_version eq "0" )) && ($args->{flag} != 7)) {
+		message ("pincode is not set in config.txt, exiting..\n");
+		quit();
+		return;
+	} elsif (($XKore_version eq "3" )  && ($args->{flag} != 7)) {
+		# XKore 3 let's user handle pin themself
+		message ("Let's user handle pin\n");
 	} elsif ($args->{flag} == 0) { # removed check for seed 0, eA/rA/brA sends a normal seed.
 		message T("PIN code is correct.\n"), "success";
 		# call charSelectScreen

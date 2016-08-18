@@ -30,7 +30,6 @@ use Translation qw(T TF);
 use Log qw(debug);
 use Utils qw(timeOut);
 use Utils::Exceptions;
-use Misc;
 # Stage constants.
 use constant {
 	INITIALIZE => 1,
@@ -171,7 +170,7 @@ sub iterate {
 			debug "CalcMapRoute failed.\n", "route";
 	
 			if ($config{teleportAuto_unstuck}) {
-				useTeleport(1);
+				Misc::useTeleport(1);
 			}
 		}
 	}

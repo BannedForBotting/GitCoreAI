@@ -58,10 +58,8 @@ my %flushTimer;
 # Initialize X-Kore-Proxy mode.
 sub new {
 	my $class = shift;
-	#my $ip = $config{XKore_listenIp} || '0.0.0.0';
-	#my $port = $config{XKore_listenPort} || 6901;
-	my $ip = '0.0.0.0' || '0.0.0.0';
-	my $port = $ENV{'XKore_listenPort'} || 6901;
+	my $ip = $ENV{DOCKER} ? '0.0.0.0' : $config{XKore_listenIp};
+	my $port = $ENV{DOCKER} ? $ENV{'XKore_listenPort'} : ($config{XKore_listenPort} || 6901);
 	my $self = bless {}, $class;
 
 	# Reuse code from Network::DirectConnection to connect to the server
@@ -306,8 +304,9 @@ sub checkProxy {
 		# sufficiently high), then the client will freeze.
 		
 		# (Re)start listening...
-		my $ip = '0.0.0.0';
-		my $port = $ENV{'XKore_listenPort'} || 6901;
+		
+		my $ip = $ENV{DOCKER} ? '0.0.0.0' : ($config{XKore_listenIp} || '127.0.0.1');
+		my $port = $ENV{DOCKER} ? $ENV{'XKore_listenPort'} : ($config{XKore_listenPort} || 6901);
 		$self->{proxy_listen} = new IO::Socket::INET(
 			LocalAddr	=> $ip,
 			LocalPort	=> $port,
@@ -458,7 +457,7 @@ sub modifyPacketIn {
 
 				my $newName = unpack("Z*", substr($serverInfo, $i + 6, 20));
 				#$newName = "$newName (proxied)";
-				$newServers .= encodeIP($ENV{'XIP'}) . pack("v*", $self->{proxy}->sockport) . 
+				$newServers .= encodeIP($ENV{DOCKER} ? $ENV{'XIP'} : $self->{proxy}->sockhost) . pack("v*", $self->{proxy}->sockport) . 
 					pack("Z20", $newName) . substr($serverInfo, $i + 26, 4) . pack("v1", 0);
 				
 			} else {
@@ -493,7 +492,7 @@ sub modifyPacketIn {
 		}
 		$self->serverDisconnect(1);
 
-		$msg = $logonInfo . encodeIP($ENV{'XIP'}) . pack("v*", $self->{proxy}->sockport);
+		$msg = $logonInfo . encodeIP($ENV{DOCKER} ? $ENV{'XIP'} : $self->{proxy}->sockhost) . pack("v*", $self->{proxy}->sockport);
 		
 	} elsif ($switch eq "006A" || $switch eq "006C" || $switch eq "0081") {
 		# An error occurred. Restart proxying

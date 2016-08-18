@@ -261,9 +261,6 @@ sub tro_sync_request_ex {
 		'093F' => '0969',
 		'0940' => '096A'
 	};
-
-	# Debug Log
-	# message "Received Sync Ex : 0x" . $args->{switch} . "\n";
 	
 	# Computing Sync Ex - By Fr3DBr
 	my $PacketID = $args->{switch};
@@ -276,13 +273,11 @@ sub tro_sync_request_ex {
 	
 	# Cleaning Leading Zeros	
 	$SyncID =~ s/^0+//;
-	
 	message ("Received Ex Packet ID : " . $PacketID . " => " . $SyncID . "\n");
 	# Converting ID to Hex Number
 	$SyncID = hex($SyncID);
 	# Dispatching Sync Ex Reply
 	$messageSender->sendReplySyncRequestEx($SyncID);
-	
 	$args->{mangle} = 2;
 }
 

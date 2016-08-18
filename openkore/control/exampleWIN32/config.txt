@@ -1,21 +1,14 @@
-# Please Read the Users Manual
+﻿# Please Read the Users Manual
 # The Manual is located at http://wiki.openkore.com/index.php?title=Manual
-
-webBind 0.0.0.0
-webPort 6902
-webSPort 6904
-webMapURL /maps/%s.png
-webDBLink_monster	http://ratemyserver.net/index.php?page=mob_db&mob_id=%s
-webDBLink_item	http://ratemyserver.net/index.php?page=item_db&item_id=%s
 
 ######## Login options and server-specific options ########
 
 master Thai
-server 3
+server 
 username
 password
 loginPinCode
-char 0
+char 
 
 # Poseidon Settings (http://wiki.openkore.com/index.php/PoseidonServer)
 # They must be the same as Query Server config in Poseidon.txt
@@ -49,11 +42,6 @@ commandPrefix ;
 callSignGM 0
 inGameAuth 0
 
-pauseCharServer 0
-pauseMapServer 0
-ignoreInvalidLogin 0
-secureLogin_requestCode
-
 # Opening cash shop when connected to map server (recv/ST0)
 whenInGame_requestCashPoints 0
 
@@ -72,9 +60,9 @@ attackAuto_onlyWhenSafe 0
 attackAuto_followTarget 1
 attackAuto_inLockOnly 1
 attackAuto_notInTown 1
-attackDistance 1.0
-attackDistanceAuto 1
-attackMaxDistance 1.5
+attackDistance 1.5
+attackDistanceAuto 0
+attackMaxDistance 2
 attackMaxRouteDistance 100
 attackMaxRouteTime 4
 attackMinPlayerDistance 2
@@ -82,7 +70,7 @@ attackMinPortalDistance 4
 attackUseWeapon 1
 attackNoGiveup 0
 attackCanSnipe 0
-attackCheckLOS 0
+attackCheckLOS 1
 attackLooters 1
 attackChangeTarget 1
 aggressiveAntiKS 1
@@ -91,6 +79,9 @@ autoMoveOnDeath 0
 autoMoveOnDeath_x
 autoMoveOnDeath_y
 autoMoveOnDeath_map
+
+#attackEquip_topHead Snake Head Hat [ศรีนวล] [1]
+#attackEquip_topHead Snake Head Hat
 
 attackEquip_topHead
 attackEquip_midHead
@@ -134,16 +125,16 @@ autoResponseOnHeal 0
 autoSpell
 autoSpell_safe
 
-avoidGM_namePattern
-avoidGM_near 0
-avoidGM_near_inTown 0
-avoidGM_talk 0
-avoidGM_reconnect 1800
+avoidGM_namePattern 
+avoidGM_near 1
+avoidGM_near_inTown 1
+avoidGM_talk 1
+avoidGM_reconnect 7200
 avoidGM_ignoreList
 
 avoidList 1
 avoidList_inLockOnly 0
-avoidList_reconnect 1800
+avoidList_reconnect 3600
 
 cachePlayerNames 1
 cachePlayerNames_duration 900
@@ -228,7 +219,7 @@ shop_random 0
 shop_useSkill 1
 
 sitAuto_hp_lower 10
-sitAuto_hp_upper 100
+sitAuto_hp_upper 10
 sitAuto_sp_lower 0
 sitAuto_sp_upper 0
 sitAuto_follow 0
@@ -312,11 +303,11 @@ showAllDamage 0
 manualURL http://wiki.openkore.com/index.php?title=Manual
 forumURL http://forums.openkore.com
 
-logChat 0
-logPrivateChat 1
-logPartyChat 1
-logGuildChat 1
-logSystemChat 1
+logChat 1
+logPrivateChat 0
+logPartyChat 0
+logGuildChat 0
+logSystemChat 0
 logEmoticons
 logConsole 0
 logAppendUsername 0
@@ -438,6 +429,19 @@ pet_return 20
 # You can copy & paste any block multiple times. So if you want to
 # configure two attack skills, just duplicate the attackSkillSlot block.
 
+attackSkillSlot Bowling Bash {
+	lvl 10
+	dist 1.5
+	sp > 20
+	onAction Attack
+	aggressives > 2
+	notMonsters Hydra
+	inLockOnly 1
+	timeout 0
+	disabled 1
+	maxUses 5
+}
+
 attackSkillSlot {
 	lvl 10
 	dist 1.5
@@ -498,6 +502,12 @@ attackComboSlot {
 	monstersCount
 }
 
+doCommand talknpc 96 30 c c r0 c n {
+	hp < 5%
+	inMap new_3-3
+	disabled 1
+}
+
 doCommand {
 	hp
 	sp
@@ -524,6 +534,17 @@ doCommand {
 	inCart
 	inMap
 	manualAI 0
+}
+
+useSelf_skill Two-Hand Quicken {
+	lvl 10
+	sp >50
+	onAction Attack
+	whenStatusInactive Two-Hand Quicken
+	inLockOnly 1
+	notWhileSitting 1
+	notInTown 1
+	disabled 1
 }
 
 useSelf_skill {
@@ -626,6 +647,12 @@ autoSwitch {
 }
 
 equipAuto {
+	topHead Pecopeco Hariband
+	onAction mapRoute, Route
+	disabled 1
+}
+
+equipAuto {
 	topHead
 	midHead
 	lowHead
@@ -663,6 +690,67 @@ equipAuto {
 	inInventory
 	manualAI 0
 }
+useSelf_item Green Herb {
+	whenStatusActive Poisoned
+	inLockOnly 1
+	notWhileSitting 1
+	inInventory Green Herb
+	disabled 0
+}
+
+useSelf_item Blue Herb, Grape {
+	sp < 50%
+	inLockOnly 1
+	notWhileSitting 1
+	inInventory Blue Herb, Grape
+	disabled 0
+}
+
+useSelf_item Monster's Feed {
+	hp < 75%
+	notWhileSitting 1
+	disabled 0
+	inInventory Monster's Feed
+}
+
+useSelf_item Red Herb, Apple, Potato, Carrot, Meat, Milk, Banana {
+	hp < 70%
+	notWhileSitting 1
+	inInventory Red Herb, Apple, Potato, Carrot, Meat, Milk, Banana
+	disabled 0
+}
+
+useSelf_item Novice Potion {
+	hp < 60%
+	notWhileSitting 1
+	inInventory Novice Potion
+	disabled 0
+}
+
+useSelf_item Red Potion {
+	hp < 50%
+	notWhileSitting 1
+	inInventory Red Potion
+	disabled 0
+}
+
+useSelf_item White Herb {
+	hp < 60%
+	notWhileSitting 1
+	inInventory White Herb
+	disabled 0
+}
+
+useSelf_item Awakening Potion {
+	onAction Attack
+	whenStatusInactive Awakening Potion
+	stopWhenHit 0
+	inLockOnly 1
+	notWhileSitting 1
+	notInTown 1
+	timeout 5
+	disabled 1
+}
 
 useSelf_item {
 	hp
@@ -692,6 +780,56 @@ useSelf_item {
 
 ######## Autostorage/autosell ########
 
+buyAuto Awakening Potion {
+	npc izlude_in 115 61
+	standpoint
+	distance 8
+	price
+	minAmount 0
+	maxAmount 5
+	disabled 1
+}
+
+buyAuto Red Potion {
+	npc izlude_in 115 61
+	standpoint
+	distance 8
+	price
+	minAmount 1
+	maxAmount 200
+	disabled 1
+}
+
+buyAuto Butterfly Wing {
+	npc izlude_in 115 61
+	standpoint
+	distance 8
+	price
+	minAmount 1
+	maxAmount 5
+	disabled 1
+}
+
+buyAuto Fly Wing {
+	npc izlude_in 115 61
+	standpoint
+	distance 8
+	price
+	minAmount 1
+	maxAmount 20
+	disabled 1
+}
+
+buyAuto Potato {
+	npc new_4-3 100 50
+	standpoint
+	distance 8
+	price
+	minAmount 1
+	maxAmount 50
+	disabled 1
+}
+
 buyAuto {
 	npc
 	standpoint
@@ -705,12 +843,12 @@ buyAuto {
 sellAuto 0
 sellAuto_npc
 sellAuto_standpoint
-sellAuto_distance 5
+sellAuto_distance 8
 sellAuto_npc_steps s e
 
 storageAuto 0
 storageAuto_npc
-storageAuto_distance 5
+storageAuto_distance 8
 storageAuto_npc_type 1
 storageAuto_npc_steps
 storageAuto_password
@@ -729,12 +867,38 @@ getAuto {
 	passive
 }
 
+avoidSkill 1
+avoidSkill_domain info
+
+avoidSkill {
+	radius 5
+	step 5
+	source
+	method 0
+	skill
+	isSelfSkill
+	lvl
+	maxCastTime
+	minCastTime
+	domain
+}
+
 avoidSkill Warp Portal {
    source Player
    radius 0
    method 0
    step 10
 }
+
+# Please Read the Users Manual
+# The Manual is located at http://wiki.openkore.com/index.php?title=Manual
+
+webBind 0.0.0.0
+webPort 6904
+webSPort 6905
+webMapURL /maps/%s.png
+webDBLink_monster	http://ratemyserver.net/index.php?page=mob_db&mob_id=%s
+webDBLink_item	http://ratemyserver.net/index.php?page=item_db&item_id=%s
 
 ######## Debugging options; only useful for developers ########
 

@@ -35,19 +35,22 @@ our ($hooks, $sessionStore, $accountServer, $charServer, $mapServer ,$mapServerC
 #
 # Start the X-Kore 2 subsystem.
 sub start {
-	#my $publicIP = $ENV{'XIP'} || '127.0.0.1';
-	my $publicIP = '0.0.0.0';
+	#my $publicIP = $config{XKore_publicIp} || '127.0.0.1';
+	my $publicIP = $ENV{DOCKER} ? '0.0.0.0' : $config{XKore_publicIp};
+	my $Port_map = $ENV{DOCKER} ? $ENV{XKore_listenPort_map} : $config{XKore_listenPort_map};
+	my $Port_char = $ENV{DOCKER} ? $ENV{XKore_listenPort_char} : $config{XKore_listenPort_char};
+	my $ListenPort = $ENV{DOCKER} ? $ENV{XKore_listenPort} : $config{XKore_listenPort};
 	$sessionStore = new Base::Ragnarok::SessionStore();
 	$mapServer = new Network::XKore2::MapServer(
 		host => $publicIP,
-		port => $ENV{XKore_listenPort_map} || undef,
+		port => $Port_map || undef,
 		serverType => $masterServer->{serverType},
 		rpackets => \%rpackets,
 		sessionStore => $sessionStore
 	);
 	$charServer = new Network::XKore2::CharServer(
 		host => $publicIP,
-		port => $ENV{XKore_listenPort_char} || undef,
+		port => $Port_char || undef,
 		serverType => $masterServer->{serverType},
 		rpackets => \%rpackets,
 		mapServer => $mapServer,
@@ -56,7 +59,7 @@ sub start {
 	);
 	$accountServer = new Network::XKore2::AccountServer(
 		host => $publicIP,
-		port => $ENV{XKore_listenPort} || 6900,
+		port => $ListenPort || 6900,
 		serverType => $masterServer->{serverType},
 		rpackets => \%rpackets,
 		charServer => $charServer,

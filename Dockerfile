@@ -25,22 +25,13 @@ RUN yum clean all
 #RUN curl -L cpanmin.us | perl - Mojolicious@5.51
 #RUN cpan Mojolicious
 
-#ENV XIP 8.8.8.8
-#ENV XLISTEN_PORT 6901
-#ENV WLISTEN_PORT 6902
-#ENV ULISTEN_PORT 6903
-#ENV WSLISTEN_PORT 6904
-
 ENV XKore_listenPort 6901
-#ENV XKore_listenPort_char $(XKore_listenPort + 1)
-#ENV XKore_listenPort_map $(XKore_listenPort_char + 1)
-#ENV webPort $(XKore_listenPort_map + 1)
-#ENV webSocketPort $(webPort + 1)
-
 ENV XKore_listenPort_char 6902
 ENV XKore_listenPort_map 6903
 ENV webPort 6904
 ENV webSocketPort 6905
+#new WIN32 and Docker support
+ENV DOCKER 1
 
 #ADD . /openkore
 COPY openkore/ /root/openkore/

@@ -96,10 +96,12 @@ sub title {
 	if ($title) {
 		if (!defined($self->{title}) || $self->{title} ne $title) {
 			$self->{title} = $title;
-			#if ($ENV{TERM} eq 'xterm' || $ENV{TERM} eq 'screen') {
-			#	print STDOUT "\e]2;" . $title . "\a";
-			#	STDOUT->flush;
-			#}
+			if (!$ENV{'DOCKER'}) {
+				if ($ENV{TERM} eq 'xterm' || $ENV{TERM} eq 'screen') {
+					print STDOUT "\e]2;" . $title . "\a";
+					STDOUT->flush;
+				}
+			}
 		}
 	} else {
 		return $self->{title};

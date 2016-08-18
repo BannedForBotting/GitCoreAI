@@ -219,7 +219,7 @@ sub parse {
 	my $handler = $self->{packet_list}{$lastSwitch};
 
 	unless ($handler) {
-		#warning "Packet Parser: Unknown switch: $lastSwitch\n";
+		warning "Packet Parser: Unknown switch: $lastSwitch\n";
 		return undef;
 	}
 
@@ -235,7 +235,7 @@ sub parse {
 	# 	}
 	# }
 
-	#debug "Received packet: $lastSwitch Handler: $handler->[0]\n", "packetParser", 2;
+	debug "Received packet: $lastSwitch Handler: $handler->[0]\n", "packetParser", 2;
 
 	# RAW_MSG is the entire message, including packet switch
 	my %args = (
@@ -284,8 +284,8 @@ sub parse {
 sub unhandledMessage {
 	my ($self, $args) = @_;
 	
-	#warning "Packet Parser: Unhandled Packet: $args->{switch} Handler: $self->{packet_list}{$args->{switch}}[0]\n";
-	#debug ("Unpacked: " . join(', ', @{$args}{@{$args->{KEYS}}}) . "\n"), "packetParser", 2 if $args->{KEYS};
+	warning "Packet Parser: Unhandled Packet: $args->{switch} Handler: $self->{packet_list}{$args->{switch}}[0]\n";
+	debug ("Unpacked: " . join(', ', @{$args}{@{$args->{KEYS}}}) . "\n"), "packetParser", 2 if $args->{KEYS};
 }
 
 ##
@@ -454,14 +454,13 @@ sub parse_pre {
 	}->{$mode} or return;
 	my ($title, $config_suffix, $desc_key, $hook) = @$values;
 	
-	#if ($config{'debugPacket_'.$config_suffix} && !existsInList($config{'debugPacket_exclude'}, $switch) ||
-	#	$config{'debugPacket_include_dumpMethod'} && existsInList($config{'debugPacket_include'}, $switch))
-	if (0 == 1)
+	if ($config{'debugPacket_'.$config_suffix} && !existsInList($config{'debugPacket_exclude'}, $switch) ||
+		$config{'debugPacket_include_dumpMethod'} && existsInList($config{'debugPacket_include'}, $switch))
 	{
 		#my $label = $packetDescriptions{$desc_key}{$switch} ? " - $packetDescriptions{$desc_key}{$switch}" : '';
 		my $label = $rpackets{$switch}{function}?" - ".$rpackets{$switch}{function}:($packetDescriptions{$desc_key}{$switch} ? " - $packetDescriptions{$desc_key}{$switch}" : '');
 		if ($config{'debugPacket_'.$config_suffix} == 1) {
-			#debug sprintf("%-24s %-4s%s [%2d bytes]%s\n", $title, $switch, $label, length($msg)), 'parseMsg', 0;
+			debug sprintf("%-24s %-4s%s [%2d bytes]%s\n", $title, $switch, $label, length($msg)), 'parseMsg', 0;
 		} elsif ($config{'debugPacket_'.$config_suffix} == 2) {
 			Misc::visualDump($msg, sprintf('%-24s %-4s%s', $title, $switch, $label));
 		}
@@ -488,8 +487,8 @@ sub unknownMessage {
 	
 	# Unknown message - ignore it
 	unless (existsInList($config{debugPacket_exclude}, $args->{switch})) {
-		#warning TF("Packet Tokenizer: Unknown switch: %s\n", $args->{switch}), 'connection';
-		#Misc::visualDump($args->{RAW_MSG}, "<< Received unknown packet") if $config{debugPacket_unparsed};
+		warning TF("Packet Tokenizer: Unknown switch: %s\n", $args->{switch}), 'connection';
+		Misc::visualDump($args->{RAW_MSG}, "<< Received unknown packet") if $config{debugPacket_unparsed};
 	}
 	
 	# Pass it along to the client, whatever it is

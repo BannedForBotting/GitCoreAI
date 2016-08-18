@@ -96,7 +96,9 @@ sub mainLoop {
 		$state = STATE_PROMPT;
 
 	} elsif ($state == STATE_PROMPT) {
-		#promptFirstTimeInformation();
+		if (!$ENV{DOCKER}) {
+			promptFirstTimeInformation();
+		}
 		$state = STATE_FINAL_INIT;
 
 	} elsif ($state == STATE_FINAL_INIT) {
@@ -149,6 +151,9 @@ sub loadDataFiles {
 		loader => [\&parseConfigFile, \%config],
 		internalName => 'config.txt',
 		autoSearch => 0);
+	#force debug off
+	#Settings::addControlFile('config_override.txt',
+	#	loader => [\&parseConfigFile, \%config]);
 	Settings::addControlFile('consolecolors.txt',
 		loader => [\&parseSectionedFile, \%consoleColors]);
 	Settings::addControlFile(Settings::getMonControlFilename(),
@@ -299,27 +304,26 @@ sub loadDataFiles {
 	return if $quit;
 
 	Plugins::callHook('start3');
-
-	if ($config{'adminPassword'} eq 'x' x 10) {
-		#Log::message(T("\nAuto-generating Admin Password due to default...\n"));
-		#configModify("adminPassword", vocalString(8));
-	#} elsif ($config{'adminPassword'} eq '') {
-	#	# This is where we protect the stupid from having a blank admin password
-	#	Log::message(T("\nAuto-generating Admin Password due to blank...\n"));
-	#	configModify("adminPassword", vocalString(8));
-	} elsif ($config{'secureAdminPassword'} eq '1') {
-		# This is where we induldge the paranoid and let them have session generated admin passwords
-		#Log::message(T("\nGenerating session Admin Password...\n"));
-		#configModify("adminPassword", vocalString(8));
+	if (!$ENV{DOCKER}) {
+		if ($config{'adminPassword'} eq 'x' x 10) {
+			Log::message(T("\nAuto-generating Admin Password due to default...\n"));
+			configModify("adminPassword", vocalString(8));
+		#} elsif ($config{'adminPassword'} eq '') {
+		#	# This is where we protect the stupid from having a blank admin password
+		#	Log::message(T("\nAuto-generating Admin Password due to blank...\n"));
+		#	configModify("adminPassword", vocalString(8));
+		} elsif ($config{'secureAdminPassword'} eq '1') {
+			# This is where we induldge the paranoid and let them have session generated admin passwords
+			Log::message(T("\nGenerating session Admin Password...\n"));
+			configModify("adminPassword", vocalString(8));
+		}
 	}
-
 	Log::message("\n");
 }
 
 sub initNetworking {
 	our $XKore_dontRedirect = 0;
 	my $XKore_version = $config{XKore};
-	#configModify("XKore", 3);
 	eval {
 		$clientPacketHandler = Network::ClientReceive->new;
 		

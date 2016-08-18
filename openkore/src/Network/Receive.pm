@@ -1809,7 +1809,7 @@ sub login_pin_code_request {
 	# 8 - incorrect
 	
 	# XKore 2 disconnect if flag is not 7
-	if ((($XKore_version eq "2" ) || ($XKore_version eq "0" )) && ($args->{flag} != 7)) {
+	if ((($XKore_version eq "2" ) || ($XKore_version eq "0" )) && ($args->{flag} != 7) && ($config{loginPinCode} eq '')) {
 		message ("pincode is not set in config.txt, exiting..\n");
 		quit();
 		return;

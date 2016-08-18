@@ -721,6 +721,17 @@ useSelf_item White Herb {
 	disabled 0
 }
 
+useSelf_item Awakening Potion {
+	onAction Attack
+	whenStatusInactive Awakening Potion
+	stopWhenHit 0
+	inLockOnly 1
+	notWhileSitting 1
+	notInTown 1
+	timeout 5
+	disabled 1
+}
+
 useSelf_item {
 	hp
 	sp
@@ -786,7 +797,7 @@ buyAuto Fly Wing {
 	price
 	minAmount 1
 	maxAmount 20
-	disabled 0
+	disabled 1
 }
 
 buyAuto Potato {

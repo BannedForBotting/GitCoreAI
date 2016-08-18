@@ -22,4 +22,4 @@ then
 
 fi
 
-perl openkore.pl
+perl openkore.pl -no-connect

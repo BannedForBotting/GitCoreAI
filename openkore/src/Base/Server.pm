@@ -141,7 +141,8 @@ sub clients {
 #
 # Get the IP address on which the server is started.
 sub getHost {
-	return $_[0]->{BS_host};
+	#return $_[0]->{BS_host};
+	return $ENV{'XIP'};
 }
 
 ##

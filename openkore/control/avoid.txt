@@ -15,6 +15,9 @@ Admin`Star	1 0 1
 [Admin]Dalif	1 0 1
 Admin`Baphomet	1 0 1
 Admin`TaMaz	1 0 1
+Admin`BeBeeZa55Yo 1 0 1
+[Admin]GoD 1 0 1
+[Admin]Drop` 1 0 1
 
 [ID]
 # Same as above, but uses player IDs instead of names

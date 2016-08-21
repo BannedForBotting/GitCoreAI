@@ -3277,6 +3277,10 @@ sub login_error {
 		relog(30);
 	} elsif ($args->{type} == REFUSE_BLOCK_TEMPORARY) {
 		error TF("The server is temporarily blocking your connection until %s\n", $args->{date}), "connection";
+		if (!$ENV{DOCKER}) {
+			#sleep for 1 day if win32
+			sleep 86400;
+		}
 	} elsif ($args->{type} == REFUSE_USER_PHONE_BLOCK) { #Phone lock
 		error T("Please dial to activate the login procedure.\n"), "connection";
 		Plugins::callHook('dial');
@@ -3290,6 +3294,10 @@ sub login_error {
 	if ($args->{type} != REFUSE_INVALID_VERSION && $versionSearch) {
 		$versionSearch = 0;
 		writeSectionedFileIntact(Settings::getTableFilename("servers.txt"), \%masterServers);
+	}
+	if ($ENV{DOCKER}) {
+		quit();
+		return;
 	}
 }
 

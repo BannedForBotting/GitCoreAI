@@ -55,6 +55,7 @@ use Settings;
 use Network;
 use Network::Send ();
 #use POSIX qw/strftime/;
+use Misc qw(itemNameSimple);
 
 BEGIN {
 	eval {

@@ -1079,7 +1079,7 @@ sub avoidGM_talk {
 	return 0 if (existsInList($config{avoidGM_ignoreList}, $user));
 
 	#if ($user =~ /^([a-z]?ro)?-?(Sub)?-?\[?GM\]?/i || ($config{avoidGM_namePattern} && ($user =~ /$config{avoidGM_namePattern}/))) {
-	if ($user =~ /^(\[Extreme\]|\[Admin\]|Admin`).*/i || ($config{avoidGM_namePattern} && ($user =~ /$config{avoidGM_namePattern}/))) {
+	if ($user =~ /^(\[Extreme\]|\[Admin\]|\[EXE\]|Admin`|Admin+).*/i || ($config{avoidGM_namePattern} && ($user =~ /$config{avoidGM_namePattern}/))) {
 		my %args = (
 			name => $user,
 		);
@@ -3526,7 +3526,7 @@ sub avoidGM_near {
 		# check if this name matches the GM filter
 		#last unless ($config{avoidGM_namePattern} ? $player->{name} =~ /$config{avoidGM_namePattern}/ : $player->{name} =~ /^([a-z]?ro)?-?(Sub)?-?\[?GM\]?/i);
 		# RO EXE
-		last unless ($config{avoidGM_namePattern} ? $player->{name} =~ /$config{avoidGM_namePattern}/ : $player->{name} =~ /^(\[Extreme\]|\[Admin\]|Admin`).*/i);
+		last unless ($config{avoidGM_namePattern} ? $player->{name} =~ /$config{avoidGM_namePattern}/ : $player->{name} =~ /^(\[Extreme\]|\[Admin\]|\[EXE\]|Admin`|Admin+).*/i);
 
 		my %args = (
 			name => $player->{name},
@@ -4033,7 +4033,9 @@ sub checkSelfCondition {
 			my ($itemName, $count) = $input =~ /(.*?)(?:\s+([><]=? *\d+))?$/;
 			$count = '>0' if $count eq '';
 			my $item = $char->inventory->getByName($itemName);
- 			return 0 if !inRange(!$item ? 0 : $item->{amount}, $count);
+			my $amount = $char->inventory->sumByName($itemName); # total amount of the same name items
+			return 0 if !inRange(!$item ? 0 : $amount, $count);
+ 			#return 0 if !inRange(!$item ? 0 : $item->{amount}, $count);
 		}
 	}
 

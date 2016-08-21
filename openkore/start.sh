@@ -23,4 +23,4 @@ then
 fi
 
 perl openkore.pl -no-connect
-rf -r ./logs/*
+

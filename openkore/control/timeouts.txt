@@ -4,7 +4,7 @@
 # The value of each variable is reffered as "x".
 
 # Server connection timeouts
-master 12
+master 40
 gamelogin 12
 charlogin 12
 maplogin 12

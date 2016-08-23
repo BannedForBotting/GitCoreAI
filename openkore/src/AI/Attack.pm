@@ -343,6 +343,19 @@ sub main {
 			if (defined $config{"attackSkillSlot_$i"."_monstersMobCount"})
 			{
 				my $monsterMobCount = $config{"attackSkillSlot_$i"."_monstersMobCount"};
+                my $monsterMobCountReal = 0;
+                my $monsters = $monstersList->getItems();
+                my (%vec, %pos);
+                getVector(\%vec, $realMonsterPos, $myPos);
+                moveAlongVector(\%pos, $myPos, \%vec, 2);
+                foreach my $monster (@{$monsters}) {
+                        my $rPos = calcPosition($monster);
+                        if( calcIsInCircle( $rPos->{x}, $rPos->{y} , $pos{x}, $pos{y} , 2 ) )
+                        {
+                                $monsterMobCountReal++;
+                        }
+                }
+
 				message TF("monstersMobCount %d of %d \n", $monsterMobCountReal , $monsterMobCount );
 				if( $monsterMobCountReal < $monsterMobCount )
 				{

@@ -339,6 +339,16 @@ sub main {
 				next;
 			}
 
+			my $allowSkillMobConfig = 1;
+			if (defined $config{"attackSkillSlot_$i"."_monstersMobCount"})
+			{
+				my $monsterMobCount = $config{"attackSkillSlot_$i"."_monstersMobCount"};
+				message TF("monstersMobCount %d of %d \n", $monsterMobCountReal , $monsterMobCount );
+				if( $monsterMobCountReal < $monsterMobCount )
+				{
+					$allowSkillMobConfig = 0;
+				}
+			}
 			my $skill = new Skill(auto => $config{"attackSkillSlot_$i"});
 			if ($skill->getOwnerType == Skill::OWNER_CHAR
 				&& checkSelfCondition("attackSkillSlot_$i")
@@ -349,6 +359,7 @@ sub main {
 				&& (!$config{"attackSkillSlot_$i"."_notMonsters"} || !existsInList($config{"attackSkillSlot_$i"."_notMonsters"}, $target->{'name'}))
 				&& (!$config{"attackSkillSlot_$i"."_previousDamage"} || inRange($target->{dmgTo}, $config{"attackSkillSlot_$i"."_previousDamage"}))
 				&& checkMonsterCondition("attackSkillSlot_${i}_target", $target)
+				&& $allowSkillMobConfig 
 			) {
 				$args->{attackSkillSlot_attempts}{$i}++;
 				$args->{attackMethod}{distance} = $config{"attackSkillSlot_$i"."_dist"};

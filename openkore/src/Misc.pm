@@ -27,6 +27,7 @@ use Carp::Assert;
 use Data::Dumper;
 use Compress::Zlib;
 use base qw(Exporter);
+use Math::Complex
 use utf8;
 
 use Globals;
@@ -70,6 +71,7 @@ our @EXPORT = (
 	# Field math
 	qw/calcRectArea
 	calcRectArea2
+	calcIsInCircle
 	checkLineSnipable
 	checkLineWalkable
 	checkWallLength
@@ -552,6 +554,13 @@ sub calcRectArea2 {
 		}
 	}
 	return @rectangle;
+}
+
+sub calcIsInCircle {
+	my ($x, $y, $cx, $cy, $r) = @_;
+
+	my @d = sqrt( (($x - $cx) ** 2) + (($y - $cy) ** 2) ) ;
+	return @d < $r;
 }
 
 ##

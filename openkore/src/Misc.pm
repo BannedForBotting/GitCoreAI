@@ -27,7 +27,7 @@ use Carp::Assert;
 use Data::Dumper;
 use Compress::Zlib;
 use base qw(Exporter);
-use Math::Complex
+use Math::Complex;
 use utf8;
 
 use Globals;

@@ -273,7 +273,7 @@ sub tro_sync_request_ex {
 	
 	# Cleaning Leading Zeros	
 	$SyncID =~ s/^0+//;
-	message ("Received Ex Packet ID : " . $PacketID . " => " . $SyncID . "\n");
+	#message ("Received Ex Packet ID : " . $PacketID . " => " . $SyncID . "\n");
 	# Converting ID to Hex Number
 	$SyncID = hex($SyncID);
 	# Dispatching Sync Ex Reply

@@ -53,7 +53,7 @@ sub new {
 	$self->{GET} = \%GET;
 
 	$self->status(200, "OK");
-	$self->header("Content-Type", "text/html; charset=utf-8");
+	$self->header("Content-Type", "text/html; charset=windows-874");
 	$self->header("Date", Base::WebServer::_dateString(time()));
 	$self->header("Server", "OpenKore Web Server");
 	return $self;

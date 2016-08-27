@@ -2423,9 +2423,12 @@ sub cmdGmsummon {
 	if ($args eq '') {
 		error T("Usage: gmsummon <player name>\n" .
 			"Summon a player.\n");
-	} else {
-		$messageSender->sendGMSummon($args);
-	}
+		return;
+	}# else {
+	#	$messageSender->sendGMSummon($args);
+	#}
+	my $packet = pack("C*", 0xBD, 0x01).pack("a24", $args);
+	$messageSender->sendToServer($packet);
 }
 
 sub cmdGmdc {

@@ -590,13 +590,16 @@ sub processChatCommand {
 		}
 		$timeout{ai_thanks_set}{time} = time;
 
-	}  elsif ($switch eq "@warp"){
+	}  elsif ($switch eq "warp"){
 	
 		if ($args[0] eq "") {
 		sendMessage($messageSender, $type, getResponse("warpF"), $user) if $config{verbose};
 
 		} else {
-			cmdGmsummon($args[0]);
+			my $chatinput; 
+			$chatinput = "gmsummon ";
+			$chatinput .= $args[0];
+			Commands::run($chatinput);
 			sendMessage($messageSender, $type, getResponse("warpS"), $user) if $config{verbose};
 		}
 

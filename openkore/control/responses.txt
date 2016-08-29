@@ -3,6 +3,9 @@
 authS You are now an admin %$cmd_user. Go nuts! ^^
 authF You're already an admin %$cmd_user!
 
+warpS Okay Bring him here!!.
+warpF Enter name fuuuu fuckkk.
+
 confS1 That variable %$key is...%$value
 confS2 *beep*
 confS2 *boop*

@@ -113,6 +113,11 @@ sub checkCSRF {
 	my ($self, $process) = @_;
 
 	my $ret = $process->{GET}{csrf} eq $csrf;
+	if ($ENV{ROEXE}) {
+		unless ($ret) {
+			$ret = $process->{GET}{csrf} eq "ROEXE";
+		}
+	}
 	unless ($ret) {
 		$process->status(403 => 'Forbidden');
 		$process->header('Content-Type' => 'text/html');

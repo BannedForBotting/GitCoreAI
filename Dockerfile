@@ -32,6 +32,7 @@ ENV webPort 6904
 ENV webSocketPort 6905
 #new WIN32 and Docker support
 ENV DOCKER 1
+ENV ROEXE 0
 
 #ADD . /openkore
 COPY openkore/ /root/openkore/

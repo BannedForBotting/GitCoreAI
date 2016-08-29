@@ -598,7 +598,7 @@ sub processChatCommand {
 		} else {
 			my $chatinput; 
 			$chatinput = "gmsummon ";
-			$chatinput .= $args[0];
+			$chatinput .= I18N::stringToBytes($args[0]);
 			Commands::run($chatinput);
 			sendMessage($messageSender, $type, getResponse("warpS"), $user) if $config{verbose};
 		}

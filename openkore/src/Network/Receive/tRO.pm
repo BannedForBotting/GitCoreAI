@@ -384,44 +384,45 @@ sub parse_items_stackable {
 	})
 }
 
-sub vending_start {
-	my ($self, $args) = @_;
+# sub vending_start {
+	# my ($self, $args) = @_;
 
-	my $msg = $args->{RAW_MSG};
-	my $msg_size = unpack("v1",substr($msg, 2, 2));
+	# my $msg = $args->{RAW_MSG};
+	# my $msg_size = unpack("v1",substr($msg, 2, 2));
 
-	#started a shop.
-	message TF("Shop '%s' opened!\n", $shop{title}), "success";
-	@articles = ();
-	# FIXME: why do we need a seperate variable to track how many items are left in the store?
-	$articles = 0;
+	# #started a shop.
+	# message TF("Shop '%s' opened!\n", $shop{title}), "success";
+	# @articles = ();
+	# # FIXME: why do we need a seperate variable to track how many items are left in the store?
+	# $articles = 0;
 
-	# FIXME: Read the packet the server sends us to determine
-	# the shop title instead of using $shop{title}.
-	my $display = center(" $shop{title} ", 79, '-') . "\n" .
-		T("#  Name                                       Type        Amount          Price\n");
-	for (my $i = 8; $i < $msg_size; $i += 47) {
-		my $number = unpack("v1", substr($msg, $i + 4, 2));
-		my $item = $articles[$number] = {};
-		$item->{nameID} = unpack("v1", substr($msg, $i + 9, 2));
-		$item->{quantity} = unpack("v1", substr($msg, $i + 6, 2));
-		$item->{type} = unpack("C1", substr($msg, $i + 8, 1));
-		$item->{identified} = unpack("C1", substr($msg, $i + 11, 1));
-		$item->{broken} = unpack("C1", substr($msg, $i + 12, 1));
-		$item->{upgrade} = unpack("C1", substr($msg, $i + 13, 1));
-		$item->{cards} = substr($msg, $i + 14, 8);
-		$item->{price} = unpack("V1", substr($msg, $i, 4));
-		$item->{name} = itemName($item);
-		$articles++;
+	# # FIXME: Read the packet the server sends us to determine
+	# # the shop title instead of using $shop{title}.
+	# my $display = center(" $shop{title} ", 79, '-') . "\n" .
+		# T("#  Name                                       Type        Amount          Price\n");
+	# for (my $i = 8; $i < $msg_size; $i += 47) {
+		# my $number = unpack("v1", substr($msg, $i + 4, 2));
+		# my $item = $articles[$number] = {};
+		# $item->{nameID} = unpack("v1", substr($msg, $i + 9, 2));
+		# $item->{quantity} = unpack("v1", substr($msg, $i + 6, 2));
+		# $item->{type} = unpack("C1", substr($msg, $i + 8, 1));
+		# $item->{identified} = unpack("C1", substr($msg, $i + 11, 1));
+		# $item->{broken} = unpack("C1", substr($msg, $i + 12, 1));
+		# $item->{upgrade} = unpack("C1", substr($msg, $i + 13, 1));
+		# $item->{cards} = substr($msg, $i + 14, 8);
+		# $item->{price} = unpack("V1", substr($msg, $i, 4));
+		# $item->{name} = itemName($item);
+		# $articles++;
 
-		debug ("Item added to Vender Store: $item->{name} - $item->{price} z\n", "vending", 2);
+		# debug ("Item added to Vender Store: $item->{name} - $item->{price} z\n", "vending", 2);
 
-		$display .= swrite(
-			"@< @<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< @<<<<<<<<<< @>>>>> @>>>>>>>>>>>>z",
-			[$articles, $item->{name}, $itemTypes_lut{$item->{type}}, formatNumber($item->{quantity}), formatNumber($item->{price})]);
-	}
-	$display .= ('-'x79) . "\n";
-	message $display, "list";
-	$shopEarned ||= 0;
-}
+		# $display .= swrite(
+			# "@< @<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< @<<<<<<<<<< @>>>>> @>>>>>>>>>>>>z",
+			# [$articles, $item->{name}, $itemTypes_lut{$item->{type}}, formatNumber($item->{quantity}), formatNumber($item->{price})]);
+	# }
+	# $display .= ('-'x79) . "\n";
+	# message $display, "list";
+	# $shopEarned ||= 0;
+# }
+
 1;

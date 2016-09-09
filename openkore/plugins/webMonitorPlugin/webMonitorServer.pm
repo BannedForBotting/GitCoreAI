@@ -502,27 +502,30 @@ sub request {
 		my ($i, $name, $class, $lvl, $title, $online, $ID, $charID);
 		my (@listMemberIndex, @listMemberName, @listMemberClass, @listMemberLvl, @listMemberTitle, @listMemberOnline, @listMemberID, @listMemberCharID);
 		
-		if (defined @{$guild{member}}) {
-			my $count = @{$guild{member}};
-				for ($i = 0; $i < $count; $i++) {
-					$name  = $guild{member}[$i]{name};
-					next if (!defined $name);
+		if (defined $guild{member})
+		{
+			if (@{$guild{member}}) {
+				my $count = @{$guild{member}};
+					for ($i = 0; $i < $count; $i++) {
+						$name  = $guild{member}[$i]{name};
+						next if (!defined $name);
 
-					$class   = $jobs_lut{$guild{member}[$i]{jobID}};
-					$lvl   = $guild{member}[$i]{lv};
-					$title = $guild{member}[$i]{title};
-					# Translation Comment: Guild member online
-					$online = $guild{member}[$i]{online} ? "<span class='label label-success'>Online</span>" : "<span class='label label-important'>Offline</span>";
-					$ID = unpack("V",$guild{member}[$i]{ID});
-					$charID = unpack("V",$guild{member}[$i]{charID});
+						$class   = $jobs_lut{$guild{member}[$i]{jobID}};
+						$lvl   = $guild{member}[$i]{lv};
+						$title = $guild{member}[$i]{title};
+						# Translation Comment: Guild member online
+						$online = $guild{member}[$i]{online} ? "<span class='label label-success'>Online</span>" : "<span class='label label-important'>Offline</span>";
+						$ID = unpack("V",$guild{member}[$i]{ID});
+						$charID = unpack("V",$guild{member}[$i]{charID});
 
-					push @listMemberIndex, $i;
-					push @listMemberName, $name;
-					push @listMemberClass, $class;
-					push @listMemberLvl, $lvl;
-					push @listMemberTitle, $title;
-					push @listMemberOnline, $online;
-					push @listMemberID, $charID;
+						push @listMemberIndex, $i;
+						push @listMemberName, $name;
+						push @listMemberClass, $class;
+						push @listMemberLvl, $lvl;
+						push @listMemberTitle, $title;
+						push @listMemberOnline, $online;
+						push @listMemberID, $charID;
+				}
 			}
 		}
 		

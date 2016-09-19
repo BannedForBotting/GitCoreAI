@@ -30,6 +30,7 @@ use utf8;
 use Carp::Assert;
 use Digest::MD5;
 use Math::BigInt;
+use Digest::HMAC_MD5 qw(hmac_md5 hmac_md5_hex);
 
 use Globals qw(%config $encryptVal $bytesSent $conState %packetDescriptions $enc_val1 $enc_val2 $char $masterServer $syncSync $accountID %timeout %talk);
 use I18N qw(bytesToString stringToBytes);
@@ -323,7 +324,20 @@ sub sendToServer {
 
 	# Packet Prefix Encryption Support
 	$self->encryptMessageID(\$msg);
-
+	if ($messageID eq $self->{packet_lut}{map_login}) {
+		$self->{hmac_enc} = 1;
+		$self->{seq} = 0;
+		debug "init hmac\n", "sendPacket", 2;
+	} elsif($self->{hmac_enc}) {
+		$msg .= pack('V', $self->{flag}) . pack('V', $self->{seq}++);
+		#$msg .= hmac_md5($msg, pack('H*', 'EDB9D10AB84C9A2E05E38997C2F64A29'));
+		$msg .= hmac_md5($msg, pack('H*', 'AE7AEE43215F3B442010CEE2AB647FBA'));
+		
+		$msg = pack('v', length($msg) + 2) . $msg;
+		debug "send hmac\n", "sendPacket", 2;
+	} else {
+		debug "send normal\n", "sendPacket", 2;
+	}
 	$net->serverSend($msg);
 	$bytesSent += length($msg);
 	

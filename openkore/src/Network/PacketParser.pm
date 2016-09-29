@@ -176,7 +176,7 @@ sub reconstruct {
 	}
 
 	unless ($self->{packet_list}{$switch}) {
-		#die "Can't reconstruct unknown packet: $switch";
+		die "Can't reconstruct unknown packet: $switch";
 	}
 
 	my $packet = $self->{packet_list}{$switch};

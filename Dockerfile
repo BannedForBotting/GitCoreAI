@@ -36,6 +36,9 @@ ENV webSocketPort 6905
 ENV DOCKER 1
 ENV ROEXE 0
 
+#new zombie client support
+#ENV XKore_ZombieIP 127.0.0.1
+
 #ADD . /openkore
 COPY openkore/ /root/openkore/
 WORKDIR /root/openkore
